@@ -90,12 +90,10 @@ export default function Home() {
 
       {/* ─── HERO ─── */}
       <section className="relative overflow-hidden text-white" style={{ background: 'linear-gradient(135deg, #050E1A 0%, #0B1829 45%, #0F1E40 100%)' }}>
-        {/* Subtle grid */}
-        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '52px 52px' }} />
         {/* Glow blobs */}
-        <div className="absolute top-0 right-1/3 w-[520px] h-[520px] bg-purple-600 opacity-10 rounded-full blur-3xl -translate-y-1/2" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-600 opacity-10 rounded-full blur-3xl translate-y-1/2" />
-        <div className="absolute top-1/2 right-0 w-72 h-72 bg-indigo-600 opacity-8 rounded-full blur-3xl -translate-y-1/2" />
+        <div className="absolute top-0 right-1/3 w-[600px] h-[600px] bg-purple-600 opacity-[0.13] rounded-full blur-3xl -translate-y-1/2" />
+        <div className="absolute bottom-0 left-1/4 w-[450px] h-[450px] bg-blue-700 opacity-[0.13] rounded-full blur-3xl translate-y-1/2" />
+        <div className="absolute top-1/2 right-0 w-80 h-80 bg-indigo-500 opacity-[0.09] rounded-full blur-3xl -translate-y-1/2" />
         <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
           <div className="flex flex-col md:flex-row items-center gap-10">
 
@@ -138,16 +136,16 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="block rounded-3xl overflow-hidden border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
               >
-                {/* Banner — ratio 1400×350 = 25% padding trick so image never crops */}
-                <div className="relative w-full overflow-hidden" style={{ paddingTop: '25%' }}>
+                {/* Banner — width 1400 height 350 → never crops, always full image */}
+                <div className="relative w-full overflow-hidden">
                   <Image
                     src="/gustavo-banner.jpg"
                     alt="Banner Gustavo Rodriguez"
-                    fill
-                    className="object-cover"
-                    sizes="540px"
+                    width={1400}
+                    height={350}
+                    className="w-full h-auto block"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30" />
                 </div>
 
                 {/* Content */}
