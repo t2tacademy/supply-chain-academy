@@ -137,16 +137,19 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="block rounded-3xl border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
               >
-                {/* Banner — shown at natural 4:1 ratio, zero crop */}
-                <div className="relative rounded-t-3xl overflow-hidden">
-                  <Image
-                    src="/gustavo-banner.jpg"
-                    alt="Banner Gustavo Rodriguez"
-                    width={1400}
-                    height={350}
-                    className="w-full h-auto block"
-                  />
-                  {/* Circular photo overlapping bottom of banner */}
+                {/* Wrapper — relative but NO overflow-hidden so circle can bleed out */}
+                <div className="relative">
+                  {/* Banner — rounded top corners only */}
+                  <div className="rounded-t-3xl overflow-hidden">
+                    <Image
+                      src="/gustavo-banner.jpg"
+                      alt="Banner Gustavo Rodriguez"
+                      width={1400}
+                      height={350}
+                      className="w-full h-auto block"
+                    />
+                  </div>
+                  {/* Circle anchored to THIS wrapper (no overflow-hidden here) */}
                   <div className="absolute bottom-0 left-6 translate-y-1/2 z-10">
                     <div className="relative w-28 h-28 rounded-full overflow-hidden ring-[5px] ring-[#07111F] shadow-2xl">
                       <Image
