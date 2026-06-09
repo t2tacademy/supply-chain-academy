@@ -193,7 +193,7 @@ export default function Home() {
         <div className="absolute top-0 right-1/3 w-[600px] h-[600px] bg-purple-600 opacity-[0.13] rounded-full blur-3xl -translate-y-1/2" />
         <div className="absolute bottom-0 left-1/4 w-[450px] h-[450px] bg-blue-700 opacity-[0.13] rounded-full blur-3xl translate-y-1/2" />
         <div className="absolute top-1/2 right-0 w-80 h-80 bg-indigo-500 opacity-[0.09] rounded-full blur-3xl -translate-y-1/2" />
-        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
+        <div className="relative max-w-6xl mx-auto px-6 py-10 md:py-28">
           <div className="flex flex-col md:flex-row items-center gap-10">
 
             {/* ── Left: text ── */}
@@ -228,7 +228,7 @@ export default function Home() {
             </div>
 
             {/* ── Right: instructor card ── */}
-            <div className="shrink-0 w-full md:w-[540px]">
+            <div className="shrink-0 w-full md:w-[480px]">
               {/* No overflow-hidden on outer so the circle can overlap banner→content */}
               <a
                 href="https://www.linkedin.com/in/gustavorodriguez-/"
@@ -329,7 +329,7 @@ export default function Home() {
             <p className="text-sm text-gray-500 mb-5">
               Elegí un nivel y llevate las 9 especializaciones. El precio ya incluye el descuento acumulado.
             </p>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {(['starter', 'pro', 'expert'] as TierKey[]).map(tier => {
                 const totals = getLevelTotals(tier)
                 const savingsPct = Math.round((totals.listPrice - totals.price) / totals.listPrice * 100)
@@ -417,7 +417,7 @@ export default function Home() {
             <div className="md:col-span-3 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
               <h3 className="font-bold text-gray-900 mb-4">Tus datos</h3>
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Nombre completo <span className="text-red-500">*</span>
@@ -443,7 +443,7 @@ export default function Home() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Email <span className="text-red-500">*</span>
@@ -582,19 +582,19 @@ export default function Home() {
       {/* ─── FLOATING CART BAR ─── */}
       {itemCount > 0 && formState === 'catalog' && (
         <div className="fixed bottom-0 left-0 right-0 z-50 animate-fade-in">
-          <div className="bg-[#0A0A0F] border-t border-purple-900/50 px-6 py-4">
-            <div className="max-w-5xl mx-auto flex items-center justify-between gap-4 flex-wrap">
+          <div className="bg-[#0A0A0F] border-t border-purple-900/50 px-4 py-3 sm:px-6 sm:py-4">
+            <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="text-white">
-                <span className="font-bold text-purple-400 text-lg">
+                <span className="font-bold text-purple-400 text-base sm:text-lg">
                   {itemCount} especialización{itemCount > 1 ? 'es' : ''}
                 </span>
                 <span className="text-gray-400 mx-2">·</span>
-                <span className="text-white font-extrabold text-xl">${total.toFixed(2)} USD</span>
+                <span className="text-white font-extrabold text-lg sm:text-xl">${total.toFixed(2)} USD</span>
               </div>
               <div className="flex gap-3 items-center">
                 <button
                   onClick={() => setSelections({})}
-                  className="text-gray-500 hover:text-gray-300 text-sm transition-colors"
+                  className="text-gray-500 hover:text-gray-300 text-sm transition-colors whitespace-nowrap"
                 >
                   Limpiar
                 </button>
@@ -603,7 +603,7 @@ export default function Home() {
                     setFormState('checkout')
                     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100)
                   }}
-                  className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-6 py-2.5 rounded-xl transition-colors"
+                  className="flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-center text-sm sm:text-base"
                 >
                   Continuar con la compra →
                 </button>
