@@ -130,28 +130,39 @@ export default function Home() {
 
             {/* ── Right: instructor card ── */}
             <div className="shrink-0 w-full md:w-[540px]">
+              {/* No overflow-hidden on outer so the circle can overlap banner→content */}
               <a
                 href="https://www.linkedin.com/in/gustavorodriguez-/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-3xl overflow-hidden border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
+                className="block rounded-3xl border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
               >
-                {/* Photo — top half of card, portrait crop */}
-                <div className="relative w-full h-72 bg-[#07111F]">
+                {/* Banner — shown at natural 4:1 ratio, zero crop */}
+                <div className="relative rounded-t-3xl overflow-hidden">
                   <Image
-                    src="/gustavo.png"
-                    alt="Gustavo Rodriguez"
-                    fill
-                    className="object-cover object-top"
-                    sizes="540px"
+                    src="/gustavo-banner.jpg"
+                    alt="Banner Gustavo Rodriguez"
+                    width={1400}
+                    height={350}
+                    className="w-full h-auto block"
                   />
-                  {/* gradient fade to card bg */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#07111F]" />
+                  {/* Circular photo overlapping bottom of banner */}
+                  <div className="absolute bottom-0 left-6 translate-y-1/2 z-10">
+                    <div className="relative w-28 h-28 rounded-full overflow-hidden ring-[5px] ring-[#07111F] shadow-2xl">
+                      <Image
+                        src="/gustavo.png"
+                        alt="Gustavo Rodriguez"
+                        fill
+                        className="object-cover object-top"
+                        sizes="112px"
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="bg-[#07111F] px-6 pb-6 -mt-6">
-                  <p className="font-extrabold text-white text-2xl leading-tight mb-1">
+                {/* Content — pt-20 leaves room for the overlapping circle */}
+                <div className="bg-[#07111F] pt-20 px-6 pb-6 rounded-b-3xl">
+                  <p className="font-extrabold text-white text-xl leading-tight mb-1">
                     Gustavo Rodriguez
                   </p>
                   <p className="text-purple-300 text-sm font-semibold mb-2">
@@ -160,8 +171,6 @@ export default function Home() {
                   <p className="text-gray-400 text-sm leading-relaxed mb-5">
                     Ex Director SC Unilever Latam · Consultor · Speaker · Director ITBA · 12.500+ seguidores
                   </p>
-
-                  {/* LinkedIn button */}
                   <div className="flex items-center gap-2 bg-[#0A66C2] group-hover:bg-[#0856a8] transition-colors text-white font-bold text-sm px-5 py-3 rounded-xl w-fit">
                     <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
