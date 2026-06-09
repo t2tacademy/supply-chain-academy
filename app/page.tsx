@@ -88,6 +88,32 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FAF7F0]">
 
+      {/* ─── NAVBAR ─── */}
+      <nav className="bg-[#050E1A] border-b border-white/5">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+          {/* Logo T2T */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center font-extrabold text-white text-sm tracking-tight shrink-0">
+              T2T
+            </div>
+            <span className="text-white font-semibold text-sm hidden sm:block">Think to Transform · Academy</span>
+          </div>
+
+          {/* Email con mailto pre-armado */}
+          <a
+            href={`mailto:t2tscacademy@gmail.com?subject=${encodeURIComponent('Consulta — Catálogo Supply Chain')}&body=${encodeURIComponent('Hola Gustavo,\n\nMe interesa obtener más información sobre el Catálogo Supply Chain.\n\nQuedo a la espera de tu respuesta.\n\nSaludos,')}`}
+            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
+          >
+            <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-orange-500/20 transition-colors flex items-center justify-center shrink-0">
+              <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+            </div>
+            <span className="text-sm hidden sm:block">t2tscacademy@gmail.com</span>
+          </a>
+        </div>
+      </nav>
+
       {/* ─── HERO ─── */}
       <section className="relative overflow-hidden text-white" style={{ background: 'linear-gradient(135deg, #050E1A 0%, #0B1829 45%, #0F1E40 100%)' }}>
         {/* Glow blobs */}
