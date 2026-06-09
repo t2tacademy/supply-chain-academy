@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel } from '@/lib/courses'
 import CategoryRow from '@/components/CategoryRow'
 import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
@@ -91,34 +92,75 @@ export default function Home() {
       <section className="bg-[#0A0A0F] text-white relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-900 opacity-20 rounded-full blur-3xl -translate-y-1/2" />
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-800 opacity-15 rounded-full blur-3xl translate-y-1/2" />
-        <div className="relative max-w-5xl mx-auto px-6 py-20 md:py-28 text-center">
-          <div className="inline-block bg-purple-900/40 border border-purple-700/50 text-purple-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-            T2T Academy · Supply Chain
-          </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-            Catálogo{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-300">
-              Supply Chain
-            </span>
-          </h1>
-          <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Formación práctica basada en experiencia real. Elegí las especializaciones que necesitás y accedé a tu contenido al instante.
-          </p>
-          <div className="flex flex-wrap justify-center gap-10 mb-10">
-            {[
-              { num: '158', label: 'cursos disponibles' },
-              { num: '9', label: 'especializaciones' },
-              { num: '30+', label: 'años de experiencia' },
-            ].map(stat => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl font-extrabold text-purple-400">{stat.num}</div>
-                <div className="text-gray-400 text-sm">{stat.label}</div>
+        <div className="relative max-w-5xl mx-auto px-6 py-20 md:py-28">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+
+            {/* ── Left: text ── */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="inline-block bg-purple-900/40 border border-purple-700/50 text-purple-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
+                T2T Academy · Supply Chain
               </div>
-            ))}
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
+                Catálogo{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-300">
+                  Supply Chain
+                </span>
+              </h1>
+              <p className="text-gray-300 text-lg max-w-xl mb-10 leading-relaxed">
+                Formación práctica basada en experiencia real. Elegí las especializaciones que necesitás y accedé a tu contenido al instante.
+              </p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-10 mb-10">
+                {[
+                  { num: '158', label: 'cursos disponibles' },
+                  { num: '9', label: 'especializaciones' },
+                  { num: '20+', label: 'años de experiencia' },
+                ].map(stat => (
+                  <div key={stat.label} className="text-center">
+                    <div className="text-3xl font-extrabold text-purple-400">{stat.num}</div>
+                    <div className="text-gray-400 text-sm">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+              <a href="#catalogo" className="inline-block bg-purple-600 hover:bg-purple-500 text-white font-bold px-8 py-4 rounded-xl transition-colors text-lg">
+                Ver especializaciones →
+              </a>
+            </div>
+
+            {/* ── Right: instructor card ── */}
+            <div className="shrink-0 w-full md:w-64">
+              <a
+                href="https://www.linkedin.com/in/gustavorodriguez-/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 hover:border-purple-500/40 transition-all group"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <div className="relative w-28 h-28 mb-4 rounded-full overflow-hidden ring-2 ring-purple-500/50 group-hover:ring-purple-400 transition-all">
+                    <Image
+                      src="/gustavo.png"
+                      alt="Gustavo Rodriguez"
+                      fill
+                      className="object-cover object-top"
+                      sizes="112px"
+                    />
+                  </div>
+                  <p className="font-bold text-white text-sm leading-tight mb-1">
+                    Gustavo Rodriguez
+                  </p>
+                  <p className="text-gray-400 text-xs leading-relaxed mb-3">
+                    Ex Director Supply Chain Unilever Latam · Consultor · Speaker · Director ITBA
+                  </p>
+                  <div className="flex items-center gap-1.5 text-xs text-purple-400 group-hover:text-purple-300 transition-colors font-semibold">
+                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                    Ver perfil en LinkedIn
+                  </div>
+                </div>
+              </a>
+            </div>
+
           </div>
-          <a href="#catalogo" className="inline-block bg-purple-600 hover:bg-purple-500 text-white font-bold px-8 py-4 rounded-xl transition-colors text-lg">
-            Ver especializaciones →
-          </a>
         </div>
       </section>
 
