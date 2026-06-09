@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel } from '@/lib/courses'
-import CategoryRow from '@/components/CategoryRow'
+import CategoryCompareTable from '@/components/CategoryCompareTable'
 import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
 import StatsSection from '@/components/StatsSection'
 
@@ -330,18 +330,9 @@ export default function Home() {
               <h3 className="font-extrabold text-gray-900 text-lg">Por especialización y nivel</h3>
             </div>
             <p className="text-sm text-gray-500 mb-5">
-              Seleccioná individualmente qué especialización querés y en qué nivel. Pro y Expert incluyen todos los niveles anteriores.
+              Elegí la especialización y comparé los niveles. Seleccioná el que querés agregar.
             </p>
-            <div className="space-y-4">
-              {CATEGORIES.map(cat => (
-                <CategoryRow
-                  key={cat.id}
-                  category={cat}
-                  selected={selections[cat.id] ?? null}
-                  onSelect={handleSelect}
-                />
-              ))}
-            </div>
+            <CategoryCompareTable selections={selections} onSelect={handleSelect} />
             {itemCount > 0 && (
               <div className="flex justify-end mt-3">
                 <button
