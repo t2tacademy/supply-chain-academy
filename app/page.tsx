@@ -93,15 +93,17 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           {/* Logo T2T */}
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center font-extrabold text-white text-sm tracking-tight shrink-0">
-              T2T
+            <div className="relative w-10 h-10 shrink-0">
+              <Image src="/t2t-logo.jpg" alt="T2T Academy" fill className="object-contain rounded-full" sizes="40px" />
             </div>
             <span className="text-white font-semibold text-sm hidden sm:block">Think to Transform · Academy</span>
           </div>
 
-          {/* Email con mailto pre-armado */}
+          {/* Email — abre Gmail en nueva pestaña */}
           <a
-            href={`mailto:t2tscacademy@gmail.com?subject=${encodeURIComponent('Consulta — Catálogo Supply Chain')}&body=${encodeURIComponent('Hola Gustavo,\n\nMe interesa obtener más información sobre el Catálogo Supply Chain.\n\nQuedo a la espera de tu respuesta.\n\nSaludos,')}`}
+            href={`https://mail.google.com/mail/?view=cm&to=t2tscacademy@gmail.com&su=${encodeURIComponent('Consulta — Catálogo Supply Chain')}&body=${encodeURIComponent('Hola Gustavo,\n\nMe interesa obtener más información sobre el Catálogo Supply Chain.\n\nQuedo a la espera de tu respuesta.\n\nSaludos,')}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
           >
             <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-orange-500/20 transition-colors flex items-center justify-center shrink-0">
