@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel } from '@/lib/courses'
 import CategoryRow from '@/components/CategoryRow'
@@ -17,6 +17,24 @@ const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   internacional: 'Transferencia internacional',
 }
 
+function useCountUp(target: number, delayMs: number = 0) {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const duration = 1800
+      const start = Date.now()
+      const id = setInterval(() => {
+        const p = Math.min((Date.now() - start) / duration, 1)
+        setCount(Math.round(target * (1 - Math.pow(1 - p, 3))))
+        if (p >= 1) clearInterval(id)
+      }, 16)
+      return () => clearInterval(id)
+    }, delayMs)
+    return () => clearTimeout(t)
+  }, [target, delayMs])
+  return count
+}
+
 export default function Home() {
   const [selections, setSelections] = useState<Selections>({})
   const [formState, setFormState] = useState<FormState>('catalog')
@@ -26,6 +44,10 @@ export default function Home() {
   const [customerPhone, setCustomerPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const heroCount158 = useCountUp(158, 400)
+  const heroCount9   = useCountUp(9,   600)
+  const heroCount20  = useCountUp(20,  800)
 
   const selectedEntries = Object.entries(selections)
   const itemCount = selectedEntries.length
@@ -142,12 +164,12 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-10 mb-10">
                 {[
-                  { num: '158', label: 'cursos disponibles' },
-                  { num: '9', label: 'especializaciones' },
-                  { num: '20+', label: 'años de experiencia' },
+                  { num: heroCount158,      suffix: '',  label: 'cursos disponibles' },
+                  { num: heroCount9,        suffix: '',  label: 'especializaciones'  },
+                  { num: heroCount20,       suffix: '+', label: 'años de experiencia'},
                 ].map(stat => (
                   <div key={stat.label} className="text-center">
-                    <div className="text-3xl font-extrabold text-purple-400">{stat.num}</div>
+                    <div className="text-3xl font-extrabold text-purple-400 tabular-nums">{stat.num}{stat.suffix}</div>
                     <div className="text-gray-400 text-sm">{stat.label}</div>
                   </div>
                 ))}
