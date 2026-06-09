@@ -127,7 +127,7 @@ export default function Home() {
             </div>
 
             {/* ── Right: instructor card ── */}
-            <div className="shrink-0 w-full md:w-[340px]">
+            <div className="shrink-0 w-full md:w-[420px]">
               <a
                 href="https://www.linkedin.com/in/gustavorodriguez-/"
                 target="_blank"
@@ -135,13 +135,13 @@ export default function Home() {
                 className="block rounded-3xl overflow-hidden border border-purple-500/30 hover:border-purple-400/70 transition-all group shadow-2xl shadow-purple-900/40 hover:shadow-purple-700/50"
               >
                 {/* Banner */}
-                <div className="relative h-44 w-full overflow-hidden">
+                <div className="relative h-52 w-full overflow-hidden">
                   <Image
                     src="/gustavo-banner.jpg"
                     alt="Banner Gustavo Rodriguez"
                     fill
                     className="object-cover object-center scale-105 group-hover:scale-100 transition-transform duration-500"
-                    sizes="340px"
+                    sizes="420px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
                 </div>
@@ -149,13 +149,13 @@ export default function Home() {
                 {/* Content */}
                 <div className="bg-[#0f0f1a] px-6 pb-6">
                   {/* Photo overlapping */}
-                  <div className="relative w-32 h-32 -mt-16 mb-4 rounded-full overflow-hidden ring-4 ring-[#0f0f1a] group-hover:ring-purple-900/80 transition-all shadow-xl">
+                  <div className="relative w-44 h-44 -mt-[88px] mb-4 rounded-full overflow-hidden ring-[5px] ring-[#0f0f1a] group-hover:ring-purple-900/80 transition-all shadow-2xl">
                     <Image
                       src="/gustavo.png"
                       alt="Gustavo Rodriguez"
                       fill
                       className="object-cover object-top"
-                      sizes="128px"
+                      sizes="176px"
                     />
                   </div>
 
