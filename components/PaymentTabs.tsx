@@ -7,13 +7,14 @@ export type PaymentMethod = 'mercadopago' | 'transferencia' | 'paypal' | 'intern
 interface Props {
   selected: PaymentMethod
   onSelect: (method: PaymentMethod) => void
+  country?: 'argentina' | 'internacional'
 }
 
-const TABS: { id: PaymentMethod; label: string; flag: string }[] = [
-  { id: 'mercadopago', label: 'Mercado Pago', flag: '🇦🇷' },
-  { id: 'transferencia', label: 'Transferencia AR', flag: '🏦' },
-  { id: 'paypal', label: 'PayPal', flag: '🌎' },
-  { id: 'internacional', label: 'Internacional', flag: '🌐' },
+const ALL_TABS: { id: PaymentMethod; label: string; flag: string; countries: ('argentina' | 'internacional')[] }[] = [
+  { id: 'mercadopago',   label: 'Mercado Pago',    flag: '🇦🇷', countries: ['argentina'] },
+  { id: 'transferencia', label: 'Transferencia AR', flag: '🏦', countries: ['argentina'] },
+  { id: 'paypal',        label: 'PayPal',           flag: '🌎', countries: ['argentina', 'internacional'] },
+  { id: 'internacional', label: 'Internacional',    flag: '🌐', countries: ['argentina', 'internacional'] },
 ]
 
 function CopyButton({ text }: { text: string }) {
@@ -51,7 +52,8 @@ function InfoBox({ children }: { children: React.ReactNode }) {
   )
 }
 
-export default function PaymentTabs({ selected, onSelect }: Props) {
+export default function PaymentTabs({ selected, onSelect, country = 'argentina' }: Props) {
+  const TABS = ALL_TABS.filter(t => t.countries.includes(country))
   return (
     <div>
       {/* Tabs */}
@@ -100,8 +102,12 @@ export default function PaymentTabs({ selected, onSelect }: Props) {
 
         {selected === 'paypal' && (
           <div>
-            <Row label="Email" value="pagos@t2tacademy.com" />
-            <Row label="Link" value="paypal.me/t2tacademy" />
+            <Row label="Email PayPal" value="t2tscacademy@gmail.com" />
+            <div className="flex items-center justify-between py-3 border-b border-gray-100 gap-4">
+              <span className="text-gray-500 text-sm font-medium w-24 flex-shrink-0">Link directo</span>
+              <a href="https://paypal.me/t2tacademy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm flex-1">paypal.me/t2tacademy</a>
+              <CopyButton text="paypal.me/t2tacademy" />
+            </div>
             <InfoBox>
               Pagá en USD desde cualquier país. Seleccioná &quot;envío a amigos&quot; para evitar comisiones adicionales.
             </InfoBox>

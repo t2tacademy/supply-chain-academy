@@ -6,7 +6,7 @@ import { CATEGORIES } from '@/lib/courses'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { customerName, customerEmail, customerPhone, selections, paymentMethod } = body
+    const { customerName, customerEmail, customerPhone, selections, paymentMethod, receiptBase64, receiptContentType, receiptFileName } = body
 
     if (!customerName || !customerEmail || !selections || selections.length === 0) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
@@ -28,6 +28,25 @@ export async function POST(req: Request) {
 
     const totalUsd = enrichedSelections.reduce((sum: number, s: { price: number }) => sum + s.price, 0)
 
+    // Upload receipt to Supabase Storage
+    let comprobante_url: string | null = null
+    if (receiptBase64 && receiptContentType) {
+      try {
+        const buffer = Buffer.from(receiptBase64, 'base64')
+        const ext = receiptFileName?.split('.').pop() || 'jpg'
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+        const { error: uploadError } = await supabase.storage
+          .from('comprobantes')
+          .upload(fileName, buffer, { contentType: receiptContentType })
+        if (!uploadError) {
+          const { data: urlData } = supabase.storage.from('comprobantes').getPublicUrl(fileName)
+          comprobante_url = urlData.publicUrl
+        }
+      } catch {
+        // Non-fatal: order is created even if receipt upload fails
+      }
+    }
+
     const { data, error } = await supabase
       .from('orders')
       .insert({
@@ -38,6 +57,7 @@ export async function POST(req: Request) {
         total_usd: totalUsd,
         payment_method: paymentMethod,
         status: 'pending',
+        comprobante_url,
       })
       .select()
       .single()
@@ -53,6 +73,7 @@ export async function POST(req: Request) {
       totalUsd,
       paymentMethod,
       approveToken: data.approve_token,
+      comprobanteUrl: comprobante_url,
     })
 
     return NextResponse.json({ success: true, orderId: data.id })

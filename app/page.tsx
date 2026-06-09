@@ -39,11 +39,20 @@ export default function Home() {
   const [selections, setSelections] = useState<Selections>({})
   const [formState, setFormState] = useState<FormState>('catalog')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('mercadopago')
+  const [country, setCountry] = useState<'argentina' | 'internacional'>('argentina')
   const [customerName, setCustomerName] = useState('')
   const [customerEmail, setCustomerEmail] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
+  const [receiptFile, setReceiptFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const handleCountryChange = (c: 'argentina' | 'internacional') => {
+    setCountry(c)
+    if (c === 'internacional' && (paymentMethod === 'mercadopago' || paymentMethod === 'transferencia')) {
+      setPaymentMethod('paypal')
+    }
+  }
 
   const heroCount158 = useCountUp(158, 400)
   const heroCount9   = useCountUp(9,   600)
@@ -78,6 +87,10 @@ export default function Home() {
       setError('Email inválido.')
       return
     }
+    if (!receiptFile) {
+      setError('Por favor adjuntá el comprobante de pago.')
+      return
+    }
 
     setError('')
     setLoading(true)
@@ -88,6 +101,14 @@ export default function Home() {
     })
 
     try {
+      // Encode receipt as base64
+      const receiptBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve((reader.result as string).split(',')[1])
+        reader.onerror = reject
+        reader.readAsDataURL(receiptFile)
+      })
+
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,6 +118,9 @@ export default function Home() {
           customerPhone,
           selections: selectionsPayload,
           paymentMethod,
+          receiptBase64,
+          receiptContentType: receiptFile.type,
+          receiptFileName: receiptFile.name,
         }),
       })
       if (!res.ok) throw new Error()
@@ -419,24 +443,69 @@ export default function Home() {
                     />
                     <p className="text-xs text-gray-400 mt-1">Aquí recibirás el link de acceso a tus cursos.</p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Teléfono / WhatsApp (opcional)
-                    </label>
-                    <input
-                      type="tel"
-                      value={customerPhone}
-                      onChange={e => setCustomerPhone(e.target.value)}
-                      placeholder="+54 9 11 1234-5678"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    />
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        WhatsApp (opcional)
+                      </label>
+                      <input
+                        type="tel"
+                        value={customerPhone}
+                        onChange={e => setCustomerPhone(e.target.value)}
+                        placeholder="+54 9 11 ..."
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">País</label>
+                      <select
+                        value={country}
+                        onChange={e => handleCountryChange(e.target.value as 'argentina' | 'internacional')}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                      >
+                        <option value="argentina">Argentina</option>
+                        <option value="internacional">Otro país</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-bold text-gray-900 mb-4">Método de pago</h3>
-                <PaymentTabs selected={paymentMethod} onSelect={setPaymentMethod} />
+                <h3 className="font-bold text-gray-900 mb-1">Medio de pago</h3>
+                <p className="text-xs text-gray-400 mb-4">Seleccioná cómo vas a pagar y completá la transferencia antes de confirmar.</p>
+                <PaymentTabs selected={paymentMethod} onSelect={setPaymentMethod} country={country} />
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                <h3 className="font-bold text-gray-900 mb-1">
+                  Adjuntá tu comprobante de pago <span className="text-red-500">*</span>
+                </h3>
+                <p className="text-xs text-gray-400 mb-4">JPG, PNG o PDF · Máx. 10 MB</p>
+                <label className={`flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl p-8 cursor-pointer transition-colors ${
+                  receiptFile ? 'border-purple-400 bg-purple-50' : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
+                }`}>
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    className="hidden"
+                    onChange={e => setReceiptFile(e.target.files?.[0] ?? null)}
+                  />
+                  {receiptFile ? (
+                    <>
+                      <span className="text-2xl">✅</span>
+                      <span className="text-sm font-medium text-purple-700 text-center">{receiptFile.name}</span>
+                      <span className="text-xs text-gray-400">Hacé clic para cambiar el archivo</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
+                      </svg>
+                      <span className="text-sm text-gray-500">Hacé clic para subir el comprobante</span>
+                    </>
+                  )}
+                </label>
               </div>
 
               {error && (
