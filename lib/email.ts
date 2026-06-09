@@ -1,7 +1,9 @@
 import { Resend } from 'resend'
 import type { OrderSelection } from './supabase'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY || 'placeholder')
+}
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@t2tacademy.com'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
@@ -22,7 +24,7 @@ export async function sendAdminNotification(order: {
 
   const approveUrl = `${BASE_URL}/api/approve/${order.approveToken}`
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'T2T Academy <noreply@t2tacademy.com>',
     to: ADMIN_EMAIL,
     subject: `🛒 Nueva compra: ${order.customerName} — $${order.totalUsd.toFixed(2)} USD`,
@@ -83,7 +85,7 @@ export async function sendCustomerAccess(order: {
     `)
     .join('')
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: 'T2T Academy <noreply@t2tacademy.com>',
     to: order.customerEmail,
     subject: '🎉 ¡Tu acceso a los cursos de Supply Chain está listo!',
