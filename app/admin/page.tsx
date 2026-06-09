@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import type { Order, OrderSelection } from '@/lib/supabase'
 
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 async function getOrders(): Promise<Order[]> {
