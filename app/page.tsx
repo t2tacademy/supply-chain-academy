@@ -136,7 +136,7 @@ export default function Home() {
     <div className="min-h-screen bg-white">
 
       {/* ─── NAVBAR ─── */}
-      <nav className="bg-[#050E1A] border-b border-white/5">
+      <nav className="sticky top-0 z-40 bg-[#050E1A] border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           {/* Logo T2T — link a la plataforma */}
           <a
