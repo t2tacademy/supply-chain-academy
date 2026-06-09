@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel } from '@/lib/courses'
 import CategoryRow from '@/components/CategoryRow'
 import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
+import StatsSection from '@/components/StatsSection'
 
 type Selections = Record<string, TierKey>
 type FormState = 'catalog' | 'checkout' | 'success'
@@ -215,6 +216,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <StatsSection />
 
       {/* ─── HOW IT WORKS ─── */}
       <section className="bg-white border-y border-amber-100 py-14">
