@@ -89,9 +89,13 @@ export default function Home() {
     <div className="min-h-screen bg-[#FAF7F0]">
 
       {/* ─── HERO ─── */}
-      <section className="bg-[#0A0A0F] text-white relative overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-900 opacity-20 rounded-full blur-3xl -translate-y-1/2" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-800 opacity-15 rounded-full blur-3xl translate-y-1/2" />
+      <section className="relative overflow-hidden text-white" style={{ background: 'linear-gradient(135deg, #050E1A 0%, #0B1829 45%, #0F1E40 100%)' }}>
+        {/* Subtle grid */}
+        <div className="absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '52px 52px' }} />
+        {/* Glow blobs */}
+        <div className="absolute top-0 right-1/3 w-[520px] h-[520px] bg-purple-600 opacity-10 rounded-full blur-3xl -translate-y-1/2" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-600 opacity-10 rounded-full blur-3xl translate-y-1/2" />
+        <div className="absolute top-1/2 right-0 w-72 h-72 bg-indigo-600 opacity-8 rounded-full blur-3xl -translate-y-1/2" />
         <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
           <div className="flex flex-col md:flex-row items-center gap-10">
 
@@ -132,7 +136,7 @@ export default function Home() {
                 href="https://www.linkedin.com/in/gustavorodriguez-/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-3xl overflow-hidden border border-purple-500/30 hover:border-purple-400/70 transition-all group shadow-2xl shadow-purple-900/40 hover:shadow-purple-700/50"
+                className="block rounded-3xl overflow-hidden border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
               >
                 {/* Banner — ratio 1400×350 = 25% padding trick so image never crops */}
                 <div className="relative w-full overflow-hidden" style={{ paddingTop: '25%' }}>
@@ -147,9 +151,9 @@ export default function Home() {
                 </div>
 
                 {/* Content */}
-                <div className="bg-[#0f0f1a] px-6 pb-6">
+                <div className="bg-[#07111F]/95 backdrop-blur-sm px-6 pb-6">
                   {/* Photo overlapping */}
-                  <div className="relative w-44 h-44 -mt-[88px] mb-4 rounded-full overflow-hidden ring-[5px] ring-[#0f0f1a] group-hover:ring-purple-900/80 transition-all shadow-2xl">
+                  <div className="relative w-44 h-44 -mt-[88px] mb-4 rounded-full overflow-hidden ring-[5px] ring-[#07111F] group-hover:ring-blue-900 transition-all shadow-2xl">
                     <Image
                       src="/gustavo.png"
                       alt="Gustavo Rodriguez"
