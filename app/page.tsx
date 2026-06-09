@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { CATEGORIES, TierKey } from '@/lib/courses'
-import CategoryCard from '@/components/CategoryCard'
+import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel } from '@/lib/courses'
+import CategoryRow from '@/components/CategoryRow'
 import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
 
 type Selections = Record<string, TierKey>
@@ -85,7 +85,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FAF7F0]">
 
       {/* ─── HERO ─── */}
       <section className="bg-[#0A0A0F] text-white relative overflow-hidden">
@@ -123,7 +123,7 @@ export default function Home() {
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section className="bg-gray-50 border-y border-gray-200 py-14">
+      <section className="bg-white border-y border-amber-100 py-14">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-center text-2xl font-bold text-gray-900 mb-10">¿Cómo funciona?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -145,16 +145,68 @@ export default function Home() {
 
       {/* ─── CATALOG ─── */}
       {formState !== 'success' && (
-        <section id="catalogo" className="max-w-6xl mx-auto px-6 py-16">
-          <div className="text-center mb-12">
+        <section id="catalogo" className="max-w-4xl mx-auto px-6 py-16">
+          <div className="text-center mb-10">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Especializaciones disponibles</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">
-              Seleccioná el nivel que mejor se adapta a tu experiencia. Pro y Expert incluyen todos los niveles anteriores con descuento acumulado.
+            <p className="text-gray-500 max-w-xl mx-auto text-sm">
+              Seleccioná el nivel dentro de cada especialización. Pro y Expert incluyen todos los niveles anteriores con descuento acumulado.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+          {/* Global level cards */}
+          <div className="mb-3">
+            <p className="text-xs text-gray-400 font-semibold tracking-wide uppercase mb-3 text-center">
+              Comprá todo el catálogo de una vez — o seleccioná categorías individuales abajo
+            </p>
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {(['starter', 'pro', 'expert'] as TierKey[]).map(tier => {
+                const totals = getLevelTotals(tier)
+                const savingsPct = Math.round((totals.listPrice - totals.price) / totals.listPrice * 100)
+                const ICONS: Record<TierKey, string> = { starter: '▲', pro: '▲▲', expert: '▲▲▲' }
+                const NAMES: Record<TierKey, string> = { starter: 'STARTER', pro: 'PRO', expert: 'EXPERT' }
+                return (
+                  <button
+                    key={tier}
+                    onClick={() => {
+                      const next: Record<string, TierKey> = {}
+                      CATEGORIES.forEach(c => { next[c.id] = tier })
+                      setSelections(next)
+                    }}
+                    className="bg-white rounded-2xl border-2 border-gray-100 p-4 text-left hover:border-amber-300 hover:shadow-md transition-all group"
+                  >
+                    <div className="text-amber-600 font-bold text-xs tracking-wide mb-2">
+                      {ICONS[tier]} {NAMES[tier]}
+                    </div>
+                    <div className="font-extrabold text-2xl text-amber-600 leading-none mb-1">
+                      ${totals.price}
+                      <span className="text-xs font-normal text-gray-400 ml-1">USD</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-2">
+                      <span className="text-xs text-gray-400 line-through">Lista ${totals.listPrice}</span>
+                      <span className="text-xs font-semibold text-emerald-600">Ahorrás {savingsPct}%</span>
+                    </div>
+                    <p className="text-xs text-gray-400">{totals.courses} cursos · {minutesToLabel(totals.minutes)}</p>
+                    <p className="text-xs text-amber-600 font-semibold mt-2 group-hover:underline">Aplicar a todas →</p>
+                  </button>
+                )
+              })}
+            </div>
+            {itemCount > 0 && (
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setSelections({})}
+                  className="text-xs text-red-400 hover:text-red-600 transition-colors"
+                >
+                  Limpiar selección
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Category rows */}
+          <div className="space-y-4">
             {CATEGORIES.map(cat => (
-              <CategoryCard
+              <CategoryRow
                 key={cat.id}
                 category={cat}
                 selected={selections[cat.id] ?? null}
@@ -162,8 +214,9 @@ export default function Home() {
               />
             ))}
           </div>
-          <div className="mt-8 bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-purple-800 max-w-2xl mx-auto text-center">
-            <strong>Precios acumulados:</strong> Pack con 30% de descuento sobre lista. Pro incluye Starter con 10% extra. Expert incluye todo con descuento adicional.
+
+          <div className="mt-6 bg-white border border-amber-100 rounded-xl p-4 text-xs text-gray-500 text-center">
+            Los precios ya incluyen descuento acumulado. Pro incluye todos los cursos Starter + los propios. Expert incluye todos los niveles.
           </div>
         </section>
       )}
@@ -253,7 +306,7 @@ export default function Home() {
 
             {/* Right: order summary */}
             <div className="md:col-span-2">
-              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 sticky top-6">
+              <div className="bg-white border border-amber-100 rounded-2xl p-5 sticky top-6">
                 <h3 className="font-bold text-gray-900 mb-4">Resumen</h3>
                 <div className="space-y-3 mb-4">
                   {selectedEntries.map(([catId, tier]) => {
@@ -263,7 +316,7 @@ export default function Home() {
                       <div key={catId} className="flex justify-between items-start gap-2 text-sm">
                         <div>
                           <p className="font-medium text-gray-800">{cat.name}</p>
-                          <p className="text-gray-400 text-xs">{t.label} · {t.includes.split('·')[0].trim()}</p>
+                          <p className="text-gray-400 text-xs">{t.label} · {t.courses} cursos · {minutesToLabel(t.minutes)}</p>
                         </div>
                         <span className="font-semibold text-gray-800 flex-shrink-0">${t.price.toFixed(2)}</span>
                       </div>
