@@ -109,7 +109,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F0]">
+    <div className="min-h-screen bg-white">
 
       {/* ─── NAVBAR ─── */}
       <nav className="bg-[#050E1A] border-b border-white/5">
@@ -129,8 +129,8 @@ export default function Home() {
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
           >
-            <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-orange-500/20 transition-colors flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+            <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-purple-500/20 transition-colors flex items-center justify-center shrink-0">
+              <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
               </svg>
             </div>
@@ -242,7 +242,7 @@ export default function Home() {
       <StatsSection />
 
       {/* ─── HOW IT WORKS ─── */}
-      <section className="bg-white border-y border-amber-100 py-14">
+      <section className="bg-white border-y border-purple-100 py-14">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-center text-2xl font-bold text-gray-900 mb-10">¿Cómo funciona?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -291,12 +291,12 @@ export default function Home() {
                       CATEGORIES.forEach(c => { next[c.id] = tier })
                       setSelections(next)
                     }}
-                    className="bg-white rounded-2xl border-2 border-gray-100 p-4 text-left hover:border-amber-300 hover:shadow-md transition-all group"
+                    className="bg-white rounded-2xl border-2 border-gray-100 p-4 text-left hover:border-purple-300 hover:shadow-md transition-all group"
                   >
-                    <div className="text-amber-600 font-bold text-xs tracking-wide mb-2">
+                    <div className="text-purple-600 font-bold text-xs tracking-wide mb-2">
                       {ICONS[tier]} {NAMES[tier]}
                     </div>
-                    <div className="font-extrabold text-2xl text-amber-600 leading-none mb-1">
+                    <div className="font-extrabold text-2xl text-purple-700 leading-none mb-1">
                       ${totals.price}
                       <span className="text-xs font-normal text-gray-400 ml-1">USD</span>
                     </div>
@@ -305,7 +305,7 @@ export default function Home() {
                       <span className="text-xs font-semibold text-emerald-600">Ahorrás {savingsPct}%</span>
                     </div>
                     <p className="text-xs text-gray-400">{totals.courses} cursos · {minutesToLabel(totals.minutes)}</p>
-                    <p className="text-xs text-amber-600 font-semibold mt-2 group-hover:underline">Aplicar a todas →</p>
+                    <p className="text-xs text-purple-600 font-semibold mt-2 group-hover:underline">Aplicar a todas →</p>
                   </button>
                 )
               })}
@@ -334,7 +334,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mt-6 bg-white border border-amber-100 rounded-xl p-4 text-xs text-gray-500 text-center">
+          <div className="mt-6 bg-white border border-purple-100 rounded-xl p-4 text-xs text-gray-500 text-center">
             Los precios ya incluyen descuento acumulado. Pro incluye todos los cursos Starter + los propios. Expert incluye todos los niveles.
           </div>
         </section>
@@ -413,7 +413,7 @@ export default function Home() {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full bg-orange-500 hover:bg-orange-400 disabled:opacity-60 text-white font-bold py-4 rounded-xl text-base transition-colors"
+                className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-60 text-white font-bold py-4 rounded-xl text-base transition-colors"
               >
                 {loading ? 'Enviando...' : `Confirmar orden — $${total.toFixed(2)} USD →`}
               </button>
@@ -425,7 +425,7 @@ export default function Home() {
 
             {/* Right: order summary */}
             <div className="md:col-span-2">
-              <div className="bg-white border border-amber-100 rounded-2xl p-5 sticky top-6">
+              <div className="bg-white border border-purple-100 rounded-2xl p-5 sticky top-6">
                 <h3 className="font-bold text-gray-900 mb-4">Resumen</h3>
                 <div className="space-y-3 mb-4">
                   {selectedEntries.map(([catId, tier]) => {
@@ -494,7 +494,7 @@ export default function Home() {
                     setFormState('checkout')
                     setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100)
                   }}
-                  className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-6 py-2.5 rounded-xl transition-colors"
+                  className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-6 py-2.5 rounded-xl transition-colors"
                 >
                   Continuar con la compra →
                 </button>

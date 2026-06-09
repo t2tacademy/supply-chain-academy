@@ -46,7 +46,7 @@ export default function CategoryRow({ category, selected, onSelect }: Props) {
   return (
     <div className={`bg-white rounded-2xl border-2 transition-all duration-200 overflow-hidden ${
       selected
-        ? 'border-amber-400 shadow-lg shadow-amber-100/60'
+        ? 'border-purple-400 shadow-lg shadow-purple-100/60'
         : 'border-gray-100 shadow-sm hover:border-gray-200'
     }`}>
       {/* ── Header ── */}
@@ -61,7 +61,7 @@ export default function CategoryRow({ category, selected, onSelect }: Props) {
           </div>
           {selectedTier && (
             <div className="shrink-0 text-right">
-              <span className="text-amber-600 font-extrabold text-xl">${selectedTier.price}</span>
+              <span className="text-purple-700 font-extrabold text-xl">${selectedTier.price}</span>
               <span className="text-xs text-gray-400 ml-1">USD</span>
             </div>
           )}
@@ -79,17 +79,17 @@ export default function CategoryRow({ category, selected, onSelect }: Props) {
                 onClick={() => handleTierClick(tier)}
                 className={`relative text-left rounded-xl px-3 py-3 border-2 transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'border-amber-400 bg-amber-50'
-                    : 'border-gray-100 bg-gray-50 hover:border-amber-200 hover:bg-amber-50/50'
+                    ? 'border-purple-400 bg-purple-50'
+                    : 'border-gray-100 bg-gray-50 hover:border-purple-200 hover:bg-purple-50/50'
                 }`}
               >
                 {/* Level label */}
-                <div className={`text-xs font-bold tracking-wide mb-2 ${isSelected ? 'text-amber-600' : 'text-gray-400'}`}>
+                <div className={`text-xs font-bold tracking-wide mb-2 ${isSelected ? 'text-purple-600' : 'text-gray-400'}`}>
                   {TIER_ICONS[tier]} {t.label.toUpperCase()}
                 </div>
 
                 {/* Price hero */}
-                <div className={`font-extrabold text-xl leading-none mb-1.5 ${isSelected ? 'text-amber-600' : 'text-gray-700'}`}>
+                <div className={`font-extrabold text-xl leading-none mb-1.5 ${isSelected ? 'text-purple-700' : 'text-gray-700'}`}>
                   ${t.price}
                   <span className="text-xs font-normal ml-0.5 text-gray-400">USD</span>
                 </div>
@@ -107,7 +107,7 @@ export default function CategoryRow({ category, selected, onSelect }: Props) {
 
                 {/* Checkmark */}
                 {isSelected && (
-                  <div className="absolute top-2 right-2 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
+                  <div className="absolute top-2 right-2 w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -129,7 +129,7 @@ export default function CategoryRow({ category, selected, onSelect }: Props) {
             {expanded ? '▲' : '▼'} Ver qué contiene esta especialización
           </span>
           {selected && (
-            <span className="text-amber-600 font-semibold">
+            <span className="text-purple-600 font-semibold">
               {category.tiers[selected].courses} cursos · {minutesToLabel(category.tiers[selected].minutes)}
             </span>
           )}
