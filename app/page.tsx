@@ -92,8 +92,8 @@ export default function Home() {
       <section className="bg-[#0A0A0F] text-white relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-900 opacity-20 rounded-full blur-3xl -translate-y-1/2" />
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-800 opacity-15 rounded-full blur-3xl translate-y-1/2" />
-        <div className="relative max-w-5xl mx-auto px-6 py-20 md:py-28">
-          <div className="flex flex-col md:flex-row items-center gap-12">
+        <div className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
+          <div className="flex flex-col md:flex-row items-center gap-10">
 
             {/* ── Left: text ── */}
             <div className="flex-1 text-center md:text-left">
@@ -127,23 +127,23 @@ export default function Home() {
             </div>
 
             {/* ── Right: instructor card ── */}
-            <div className="shrink-0 w-full md:w-[420px]">
+            <div className="shrink-0 w-full md:w-[540px]">
               <a
                 href="https://www.linkedin.com/in/gustavorodriguez-/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block rounded-3xl overflow-hidden border border-purple-500/30 hover:border-purple-400/70 transition-all group shadow-2xl shadow-purple-900/40 hover:shadow-purple-700/50"
               >
-                {/* Banner */}
-                <div className="relative h-52 w-full overflow-hidden">
+                {/* Banner — ratio 1400×350 = 25% padding trick so image never crops */}
+                <div className="relative w-full overflow-hidden" style={{ paddingTop: '25%' }}>
                   <Image
                     src="/gustavo-banner.jpg"
                     alt="Banner Gustavo Rodriguez"
                     fill
-                    className="object-cover object-center scale-105 group-hover:scale-100 transition-transform duration-500"
-                    sizes="420px"
+                    className="object-cover"
+                    sizes="540px"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
                 </div>
 
                 {/* Content */}
