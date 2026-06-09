@@ -17,6 +17,12 @@ const COURSE_TIER_LABEL: Record<TierKey, string> = {
   expert:  'Expert (adicionales)',
 }
 
+const BADGE_COLORS: Record<TierKey, string> = {
+  starter: 'bg-emerald-100 text-emerald-700',
+  pro:     'bg-sky-100 text-sky-700',
+  expert:  'bg-violet-100 text-violet-700',
+}
+
 interface Props {
   selections: Record<string, TierKey>
   onSelect: (categoryId: string, tier: TierKey | null) => void
@@ -25,6 +31,16 @@ interface Props {
 export default function CategoryCompareTable({ selections, onSelect }: Props) {
   const [activeCatId, setActiveCatId] = useState(CATEGORIES[0].id)
   const cat = CATEGORIES.find(c => c.id === activeCatId)!
+
+  const colClass = (tier: TierKey) => {
+    const sel = selections[cat.id] === tier
+    return `border-l border-gray-100 cursor-pointer transition-colors ${
+      sel ? 'bg-purple-50/70' : 'hover:bg-purple-50/30'
+    }`
+  }
+
+  const toggle = (tier: TierKey) =>
+    onSelect(cat.id, selections[cat.id] === tier ? null : tier)
 
   return (
     <div>
@@ -54,15 +70,25 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
         <table className="w-full min-w-[520px] border-collapse">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="p-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-32" />
+              <th className="p-4 w-32" />
               {TIERS.map(tier => {
                 const m = TIER_META[tier]
                 const isSelected = selections[cat.id] === tier
                 return (
                   <th
                     key={tier}
-                    className={`p-4 text-center border-l border-gray-200 ${isSelected ? 'bg-purple-50' : ''}`}
+                    onClick={() => toggle(tier)}
+                    className={`p-4 text-center border-l border-gray-200 cursor-pointer transition-colors select-none ${
+                      isSelected ? 'bg-purple-100' : 'hover:bg-purple-50/30'
+                    }`}
                   >
+                    {isSelected && (
+                      <div className="flex justify-center mb-1">
+                        <span className="text-xs font-bold text-white bg-purple-600 px-2 py-0.5 rounded-full">
+                          ✓ Seleccionado
+                        </span>
+                      </div>
+                    )}
                     <div className={`font-extrabold text-base ${isSelected ? 'text-purple-700' : 'text-gray-800'}`}>
                       {m.icon} {m.name.toUpperCase()}
                     </div>
@@ -83,7 +109,7 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
                 const t = cat.tiers[tier]
                 const isSelected = selections[cat.id] === tier
                 return (
-                  <td key={tier} className={`p-4 text-center border-l border-gray-100 ${isSelected ? 'bg-purple-50/60' : ''}`}>
+                  <td key={tier} onClick={() => toggle(tier)} className={`p-4 text-center ${colClass(tier)}`}>
                     <span className={`font-extrabold text-xl ${isSelected ? 'text-purple-700' : 'text-gray-800'}`}>
                       ${t.price.toFixed(2)}
                     </span>
@@ -98,9 +124,8 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
               <td className="p-4 text-sm font-semibold text-gray-600 bg-gray-50/60">Precio lista</td>
               {TIERS.map(tier => {
                 const t = cat.tiers[tier]
-                const isSelected = selections[cat.id] === tier
                 return (
-                  <td key={tier} className={`p-4 text-center border-l border-gray-100 ${isSelected ? 'bg-purple-50/60' : ''}`}>
+                  <td key={tier} onClick={() => toggle(tier)} className={`p-4 text-center ${colClass(tier)}`}>
                     <span className="text-xs text-gray-400 line-through">${t.listPrice.toFixed(2)}</span>
                     <span className="text-xs font-bold text-emerald-600 ml-1.5">−{t.savings}%</span>
                   </td>
@@ -113,9 +138,8 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
               <td className="p-4 text-sm font-semibold text-gray-600 bg-gray-50/60">Cursos</td>
               {TIERS.map(tier => {
                 const t = cat.tiers[tier]
-                const isSelected = selections[cat.id] === tier
                 return (
-                  <td key={tier} className={`p-4 text-center border-l border-gray-100 ${isSelected ? 'bg-purple-50/60' : ''}`}>
+                  <td key={tier} onClick={() => toggle(tier)} className={`p-4 text-center ${colClass(tier)}`}>
                     <span className="font-bold text-gray-800">{t.courses}</span>
                     <span className="text-xs text-gray-400 ml-1">cursos</span>
                   </td>
@@ -128,32 +152,9 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
               <td className="p-4 text-sm font-semibold text-gray-600 bg-gray-50/60">Duración</td>
               {TIERS.map(tier => {
                 const t = cat.tiers[tier]
-                const isSelected = selections[cat.id] === tier
                 return (
-                  <td key={tier} className={`p-4 text-center border-l border-gray-100 ${isSelected ? 'bg-purple-50/60' : ''}`}>
+                  <td key={tier} onClick={() => toggle(tier)} className={`p-4 text-center ${colClass(tier)}`}>
                     <span className="text-sm font-medium text-gray-700">{minutesToLabel(t.minutes)}</span>
-                  </td>
-                )
-              })}
-            </tr>
-
-            {/* ── Botón de selección ── */}
-            <tr className="border-b border-gray-200">
-              <td className="p-4 bg-gray-50/60" />
-              {TIERS.map(tier => {
-                const isSelected = selections[cat.id] === tier
-                return (
-                  <td key={tier} className={`p-4 text-center border-l border-gray-200 ${isSelected ? 'bg-purple-50/60' : ''}`}>
-                    <button
-                      onClick={() => onSelect(cat.id, isSelected ? null : tier)}
-                      className={`w-full py-2 px-3 rounded-xl text-sm font-bold transition-all ${
-                        isSelected
-                          ? 'bg-purple-600 text-white shadow-sm'
-                          : 'bg-gray-100 text-gray-600 hover:bg-purple-100 hover:text-purple-700'
-                      }`}
-                    >
-                      {isSelected ? '✓ Seleccionado' : 'Seleccionar'}
-                    </button>
                   </td>
                 )
               })}
@@ -164,26 +165,22 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
               <td className="p-4 text-sm font-semibold text-gray-600 bg-gray-50/60 align-top">
                 Contenido
               </td>
-              {TIERS.map((tier, i) => {
+              {TIERS.map(tier => {
                 const titles = cat.courseTitles[tier]
                 const isSelected = selections[cat.id] === tier
-                const badgeColors: Record<TierKey, string> = {
-                  starter: 'bg-emerald-100 text-emerald-700',
-                  pro:     'bg-sky-100 text-sky-700',
-                  expert:  'bg-violet-100 text-violet-700',
-                }
                 return (
                   <td
                     key={tier}
-                    className={`p-4 border-l border-gray-100 align-top ${isSelected ? 'bg-purple-50/40' : ''}`}
+                    onClick={() => toggle(tier)}
+                    className={`p-4 align-top ${colClass(tier)}`}
                   >
-                    <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded mb-3 ${badgeColors[tier]}`}>
+                    <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded mb-3 ${BADGE_COLORS[tier]}`}>
                       {TIER_META[tier].icon} {COURSE_TIER_LABEL[tier]}
                     </span>
                     <ul className="space-y-1.5">
                       {titles.map((title, j) => (
                         <li key={j} className="flex items-start gap-1.5 text-xs text-gray-600 leading-snug">
-                          <span className="text-gray-300 mt-0.5 shrink-0">›</span>
+                          <span className={`mt-0.5 shrink-0 ${isSelected ? 'text-purple-400' : 'text-gray-300'}`}>›</span>
                           <span>{title}</span>
                         </li>
                       ))}
