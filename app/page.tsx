@@ -88,6 +88,45 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FAF7F0]">
 
+      {/* ─── NAVBAR ─── */}
+      <nav className="sticky top-0 z-50 bg-[#050E1A]/95 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+          {/* Logo */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center font-extrabold text-white text-sm tracking-tight">T2T</div>
+            <span className="text-white/60 text-sm hidden sm:block">Think to Transform · Academy</span>
+          </div>
+          {/* Right */}
+          <div className="flex items-center gap-3">
+            <a href="mailto:t2tscacademy@gmail.com" className="text-gray-400 text-sm hidden md:block hover:text-white transition-colors">
+              t2tscacademy@gmail.com
+            </a>
+            <a
+              href="https://wa.me/COMPLETAR"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 bg-green-600 hover:bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full transition-colors"
+            >
+              💬 WhatsApp
+            </a>
+            <a
+              href="https://www.linkedin.com/in/gustavorodriguez-/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 group"
+            >
+              <div className="relative w-8 h-8 rounded-full overflow-hidden ring-1 ring-white/20 shrink-0">
+                <Image src="/gustavo.png" fill className="object-cover object-top" sizes="32px" alt="Gustavo" />
+              </div>
+              <div className="hidden md:block">
+                <p className="text-white text-xs font-semibold leading-tight">Gustavo Rodriguez</p>
+                <p className="text-gray-400 text-xs group-hover:text-purple-300 transition-colors">Ver perfil LinkedIn →</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </nav>
+
       {/* ─── HERO ─── */}
       <section className="relative overflow-hidden text-white" style={{ background: 'linear-gradient(135deg, #050E1A 0%, #0B1829 45%, #0F1E40 100%)' }}>
         {/* Glow blobs */}
@@ -99,30 +138,60 @@ export default function Home() {
 
             {/* ── Left: text ── */}
             <div className="flex-1 text-center md:text-left">
-              <div className="inline-block bg-purple-900/40 border border-purple-700/50 text-purple-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-                T2T Academy · Supply Chain
+              <div className="inline-block bg-orange-500/20 border border-orange-500/40 text-orange-300 text-xs font-bold px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase">
+                Supply Chain · Latam 2026
               </div>
-              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
                 Catálogo{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-300">
-                  Supply Chain
-                </span>
+                <span className="text-orange-400">Supply Chain</span>
               </h1>
-              <p className="text-gray-300 text-lg max-w-xl mb-10 leading-relaxed">
-                Formación práctica basada en experiencia real. Elegí las especializaciones que necesitás y accedé a tu contenido al instante.
-              </p>
-              <div className="flex flex-wrap justify-center md:justify-start gap-10 mb-10">
+
+              {/* Tagline */}
+              <div className="border-l-4 border-orange-500 pl-4 mb-6 text-left">
+                <p className="text-gray-300 text-base italic leading-relaxed">
+                  De la teoría a la práctica,<br />y de la práctica al liderazgo.
+                </p>
+              </div>
+
+              {/* Credential cards */}
+              <div className="space-y-2 mb-7">
+                <div className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-left">
+                  <span className="text-base mt-0.5 shrink-0">🏭</span>
+                  <div>
+                    <p className="text-orange-400 text-sm font-semibold">Director de Supply Chain · Unilever</p>
+                    <p className="text-gray-400 text-xs mt-0.5">Una experiencia que muy pocos instructores en el mundo pueden ofrecer</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-left">
+                  <span className="text-base mt-0.5 shrink-0">🎓</span>
+                  <div>
+                    <p className="text-white text-sm font-semibold">Director Ingeniería Industrial · ITBA</p>
+                    <p className="text-gray-400 text-xs mt-0.5">32 años de experiencia operativa internacional</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats 2×2 */}
+              <div className="grid grid-cols-2 gap-2 mb-7 max-w-xs md:max-w-sm">
                 {[
-                  { num: '158', label: 'cursos disponibles' },
-                  { num: '9', label: 'especializaciones' },
-                  { num: '20+', label: 'años de experiencia' },
-                ].map(stat => (
-                  <div key={stat.label} className="text-center">
-                    <div className="text-3xl font-extrabold text-purple-400">{stat.num}</div>
-                    <div className="text-gray-400 text-sm">{stat.label}</div>
+                  { num: '158', label: 'CURSOS' },
+                  { num: '9',   label: 'CATEGORÍAS' },
+                  { num: '3',   label: 'NIVELES' },
+                  { num: '37h', label: 'CONTENIDO' },
+                ].map(s => (
+                  <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl py-3 text-center">
+                    <div className="text-2xl font-extrabold text-orange-400">{s.num}</div>
+                    <div className="text-gray-400 text-xs tracking-widest mt-0.5">{s.label}</div>
                   </div>
                 ))}
               </div>
+
+              {/* LATAM flags */}
+              <div className="flex items-center gap-2 mb-7 justify-center md:justify-start">
+                <span className="text-lg">🇦🇷🇲🇽🇨🇴🇵🇪🇨🇱🇺🇾🇧🇷</span>
+                <span className="text-gray-400 text-xs tracking-widest uppercase">Disponible en toda Latam</span>
+              </div>
+
               <a href="#catalogo" className="inline-block bg-purple-600 hover:bg-purple-500 text-white font-bold px-8 py-4 rounded-xl transition-colors text-lg">
                 Ver especializaciones →
               </a>
