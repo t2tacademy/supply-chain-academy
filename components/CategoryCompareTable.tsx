@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { CATEGORIES, TierKey, minutesToLabel } from '@/lib/courses'
 
 const TIERS: TierKey[] = ['starter', 'pro', 'expert']
@@ -31,6 +31,15 @@ interface Props {
 export default function CategoryCompareTable({ selections, onSelect }: Props) {
   const [activeCatId, setActiveCatId] = useState(CATEGORIES[0].id)
   const cat = CATEGORIES.find(c => c.id === activeCatId)!
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (el && window.innerWidth < 640) {
+      // On mobile, start scroll past the label column (w-32 = 128px) to show all 3 tiers
+      el.scrollLeft = 128
+    }
+  }, [activeCatId])
 
   const colClass = (tier: TierKey) => {
     const sel = selections[cat.id] === tier
@@ -66,7 +75,7 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
       <p className="text-sm text-gray-500 mb-4">{cat.description}</p>
 
       {/* ── Comparison table ── */}
-      <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+      <div ref={scrollRef} className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
         <table className="w-full min-w-[520px] border-collapse">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
