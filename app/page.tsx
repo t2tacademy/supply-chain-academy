@@ -134,10 +134,10 @@ export default function Home() {
                 href="https://www.linkedin.com/in/gustavorodriguez-/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-3xl overflow-hidden border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
+                className="block rounded-3xl border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
               >
-                {/* Banner — width 1400 height 350 → never crops, always full image */}
-                <div className="relative w-full overflow-hidden">
+                {/* Banner — rounded-t-3xl clips only top corners, no overflow cut on sides */}
+                <div className="relative w-full rounded-t-3xl overflow-hidden">
                   <Image
                     src="/gustavo-banner.jpg"
                     alt="Banner Gustavo Rodriguez"
@@ -149,7 +149,7 @@ export default function Home() {
                 </div>
 
                 {/* Content */}
-                <div className="bg-[#07111F]/95 backdrop-blur-sm px-6 pb-6">
+                <div className="bg-[#07111F]/95 backdrop-blur-sm px-6 pb-6 rounded-b-3xl">
                   {/* Photo overlapping */}
                   <div className="relative w-44 h-44 -mt-[88px] mb-4 rounded-full overflow-hidden ring-[5px] ring-[#07111F] group-hover:ring-blue-900 transition-all shadow-2xl">
                     <Image
