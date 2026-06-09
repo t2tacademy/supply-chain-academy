@@ -265,19 +265,23 @@ export default function Home() {
       {/* ─── CATALOG ─── */}
       {formState !== 'success' && (
         <section id="catalogo" className="max-w-4xl mx-auto px-6 py-16">
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Especializaciones disponibles</h2>
             <p className="text-gray-500 max-w-xl mx-auto text-sm">
-              Seleccioná el nivel dentro de cada especialización. Pro y Expert incluyen todos los niveles anteriores con descuento acumulado.
+              Dos formas de armar tu catálogo. Podés elegir un nivel completo o personalizar especialización por especialización.
             </p>
           </div>
 
-          {/* Global level cards */}
-          <div className="mb-3">
-            <p className="text-xs text-gray-400 font-semibold tracking-wide uppercase mb-3 text-center">
-              Comprá todo el catálogo de una vez — o seleccioná categorías individuales abajo
+          {/* ── OPCIÓN 1: Catálogo completo ── */}
+          <div className="bg-purple-50 border-2 border-purple-200 rounded-2xl p-6 mb-6">
+            <div className="flex items-center gap-3 mb-1">
+              <span className="text-xs font-extrabold text-white bg-purple-600 px-2.5 py-1 rounded-full tracking-wide">OPCIÓN 1</span>
+              <h3 className="font-extrabold text-gray-900 text-lg">Catálogo completo por nivel</h3>
+            </div>
+            <p className="text-sm text-gray-500 mb-5">
+              Elegí un nivel y llevate las 9 especializaciones. El precio ya incluye el descuento acumulado.
             </p>
-            <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className="grid grid-cols-3 gap-3">
               {(['starter', 'pro', 'expert'] as TierKey[]).map(tier => {
                 const totals = getLevelTotals(tier)
                 const savingsPct = Math.round((totals.listPrice - totals.price) / totals.listPrice * 100)
@@ -291,27 +295,55 @@ export default function Home() {
                       CATEGORIES.forEach(c => { next[c.id] = tier })
                       setSelections(next)
                     }}
-                    className="bg-white rounded-2xl border-2 border-gray-100 p-4 text-left hover:border-purple-300 hover:shadow-md transition-all group"
+                    className="bg-white rounded-2xl border-2 border-purple-100 p-4 text-left hover:border-purple-400 hover:shadow-md transition-all group"
                   >
                     <div className="text-purple-600 font-bold text-xs tracking-wide mb-2">
                       {ICONS[tier]} {NAMES[tier]}
                     </div>
                     <div className="font-extrabold text-2xl text-purple-700 leading-none mb-1">
-                      ${totals.price}
+                      ${totals.price.toFixed(2)}
                       <span className="text-xs font-normal text-gray-400 ml-1">USD</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-2">
-                      <span className="text-xs text-gray-400 line-through">Lista ${totals.listPrice}</span>
+                      <span className="text-xs text-gray-400 line-through">Lista ${totals.listPrice.toFixed(2)}</span>
                       <span className="text-xs font-semibold text-emerald-600">Ahorrás {savingsPct}%</span>
                     </div>
                     <p className="text-xs text-gray-400">{totals.courses} cursos · {minutesToLabel(totals.minutes)}</p>
-                    <p className="text-xs text-purple-600 font-semibold mt-2 group-hover:underline">Aplicar a todas →</p>
+                    <p className="text-xs text-purple-600 font-semibold mt-2 group-hover:underline">Seleccionar →</p>
                   </button>
                 )
               })}
             </div>
+          </div>
+
+          {/* ── Divider ── */}
+          <div className="flex items-center gap-4 my-6">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="text-sm font-bold text-gray-400 px-2">ó</span>
+            <div className="flex-1 h-px bg-gray-200" />
+          </div>
+
+          {/* ── OPCIÓN 2: Por especialización ── */}
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <span className="text-xs font-extrabold text-white bg-gray-500 px-2.5 py-1 rounded-full tracking-wide">OPCIÓN 2</span>
+              <h3 className="font-extrabold text-gray-900 text-lg">Por especialización y nivel</h3>
+            </div>
+            <p className="text-sm text-gray-500 mb-5">
+              Seleccioná individualmente qué especialización querés y en qué nivel. Pro y Expert incluyen todos los niveles anteriores.
+            </p>
+            <div className="space-y-4">
+              {CATEGORIES.map(cat => (
+                <CategoryRow
+                  key={cat.id}
+                  category={cat}
+                  selected={selections[cat.id] ?? null}
+                  onSelect={handleSelect}
+                />
+              ))}
+            </div>
             {itemCount > 0 && (
-              <div className="flex justify-end">
+              <div className="flex justify-end mt-3">
                 <button
                   onClick={() => setSelections({})}
                   className="text-xs text-red-400 hover:text-red-600 transition-colors"
@@ -320,18 +352,6 @@ export default function Home() {
                 </button>
               </div>
             )}
-          </div>
-
-          {/* Category rows */}
-          <div className="space-y-4">
-            {CATEGORIES.map(cat => (
-              <CategoryRow
-                key={cat.id}
-                category={cat}
-                selected={selections[cat.id] ?? null}
-                onSelect={handleSelect}
-              />
-            ))}
           </div>
 
           <div className="mt-6 bg-white border border-purple-100 rounded-xl p-4 text-xs text-gray-500 text-center">
