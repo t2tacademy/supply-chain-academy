@@ -101,7 +101,7 @@ export default function Home() {
 
           {/* Email — abre Gmail en nueva pestaña */}
           <a
-            href={`https://mail.google.com/mail/?view=cm&to=t2tscacademy@gmail.com&su=${encodeURIComponent('Consulta — Catálogo Supply Chain')}&body=${encodeURIComponent('Hola Gustavo,\n\nMe interesa obtener más información sobre el Catálogo Supply Chain.\n\nQuedo a la espera de tu respuesta.\n\nSaludos,')}`}
+            href={`https://mail.google.com/mail/?view=cm&to=t2tscacademy@gmail.com&su=${encodeURIComponent('Consulta — Catálogo Supply Chain')}&body=${encodeURIComponent('¡Hola Gustavo! 👋\n\nEstuve viendo el Catálogo Supply Chain y me parece una oportunidad increíble para potenciar mi carrera. Me entusiasmó mucho la propuesta — especialmente la combinación de experiencia real con formación práctica.\n\nMe gustaría saber más sobre los módulos disponibles y cómo puedo empezar. ¿Podés contarme los próximos pasos?\n\n¡Muchas gracias y saludos!')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
