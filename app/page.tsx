@@ -401,7 +401,7 @@ export default function Home() {
 
       {/* ─── CHECKOUT ─── */}
       {formState === 'checkout' && (
-        <section id="checkout-section" className="max-w-3xl mx-auto px-6 pb-24 animate-fade-in">
+        <section id="checkout-section" className="max-w-5xl mx-auto px-6 pb-24 animate-fade-in">
           <div className="flex items-center gap-3 mb-8">
             <button
               onClick={() => setFormState('catalog')}
@@ -412,12 +412,12 @@ export default function Home() {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Completá tu orden</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            {/* Left: form */}
-            <div className="md:col-span-3 space-y-6">
-              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-bold text-gray-900 mb-4">Tus datos</h3>
-                <div className="space-y-4">
+          {/* ── Row 1: Datos + Resumen ── */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+            <div className="md:col-span-3 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-gray-900 mb-4">Tus datos</h3>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Nombre completo <span className="text-red-500">*</span>
@@ -432,6 +432,20 @@ export default function Home() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
+                      WhatsApp (opcional)
+                    </label>
+                    <input
+                      type="tel"
+                      value={customerPhone}
+                      onChange={e => setCustomerPhone(e.target.value)}
+                      placeholder="+54 9 11 ..."
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Email <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -441,79 +455,98 @@ export default function Home() {
                       placeholder="juan@empresa.com"
                       className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     />
-                    <p className="text-xs text-gray-400 mt-1">Aquí recibirás el link de acceso a tus cursos.</p>
+                    <p className="text-xs text-gray-400 mt-1">Aquí recibirás el link de acceso.</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        WhatsApp (opcional)
-                      </label>
-                      <input
-                        type="tel"
-                        value={customerPhone}
-                        onChange={e => setCustomerPhone(e.target.value)}
-                        placeholder="+54 9 11 ..."
-                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">País</label>
-                      <select
-                        value={country}
-                        onChange={e => handleCountryChange(e.target.value as 'argentina' | 'internacional')}
-                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-                      >
-                        <option value="argentina">Argentina</option>
-                        <option value="internacional">Otro país</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">País</label>
+                    <select
+                      value={country}
+                      onChange={e => handleCountryChange(e.target.value as 'argentina' | 'internacional')}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                    >
+                      <option value="argentina">Argentina</option>
+                      <option value="internacional">Otro país</option>
+                    </select>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-bold text-gray-900 mb-1">Medio de pago</h3>
-                <p className="text-xs text-gray-400 mb-4">Seleccioná cómo vas a pagar y completá la transferencia antes de confirmar.</p>
-                <PaymentTabs selected={paymentMethod} onSelect={setPaymentMethod} country={country} />
+            <div className="md:col-span-2 bg-white border border-purple-100 rounded-2xl p-5 shadow-sm">
+              <h3 className="font-bold text-gray-900 mb-4">Resumen</h3>
+              <div className="space-y-3 mb-4">
+                {selectedEntries.map(([catId, tier]) => {
+                  const cat = CATEGORIES.find(c => c.id === catId)!
+                  const t = cat.tiers[tier]
+                  return (
+                    <div key={catId} className="flex justify-between items-start gap-2 text-sm">
+                      <div>
+                        <p className="font-medium text-gray-800">{cat.name}</p>
+                        <p className="text-gray-400 text-xs">{t.label} · {t.courses} cursos · {minutesToLabel(t.minutes)}</p>
+                      </div>
+                      <span className="font-semibold text-gray-800 flex-shrink-0">${t.price.toFixed(2)}</span>
+                    </div>
+                  )
+                })}
               </div>
-
-              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-bold text-gray-900 mb-1">
-                  Adjuntá tu comprobante de pago <span className="text-red-500">*</span>
-                </h3>
-                <p className="text-xs text-gray-400 mb-4">JPG, PNG o PDF · Máx. 10 MB</p>
-                <label className={`flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl p-8 cursor-pointer transition-colors ${
-                  receiptFile ? 'border-purple-400 bg-purple-50' : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
-                }`}>
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    className="hidden"
-                    onChange={e => setReceiptFile(e.target.files?.[0] ?? null)}
-                  />
-                  {receiptFile ? (
-                    <>
-                      <span className="text-2xl">✅</span>
-                      <span className="text-sm font-medium text-purple-700 text-center">{receiptFile.name}</span>
-                      <span className="text-xs text-gray-400">Hacé clic para cambiar el archivo</span>
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
-                      </svg>
-                      <span className="text-sm text-gray-500">Hacé clic para subir el comprobante</span>
-                    </>
-                  )}
-                </label>
+              <div className="border-t border-gray-200 pt-3 flex justify-between items-center">
+                <span className="font-bold text-gray-900">Total</span>
+                <span className="font-extrabold text-purple-700 text-xl">${total.toFixed(2)} USD</span>
               </div>
+              <p className="text-xs text-gray-400 mt-2">Método: {PAYMENT_METHOD_LABELS[paymentMethod]}</p>
+            </div>
+          </div>
 
+          {/* ── Row 2: Medio de pago (full width) ── */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-6">
+            <h3 className="font-bold text-gray-900 mb-1">Medio de pago</h3>
+            <p className="text-xs text-gray-400 mb-4">Completá la transferencia antes de confirmar la orden.</p>
+            <PaymentTabs selected={paymentMethod} onSelect={setPaymentMethod} country={country} />
+          </div>
+
+          {/* ── Row 3: Comprobante + Submit ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-gray-900 mb-1">
+                Adjuntá tu comprobante <span className="text-red-500">*</span>
+              </h3>
+              <p className="text-xs text-gray-400 mb-4">JPG, PNG o PDF · Máx. 10 MB</p>
+              <label className={`flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl p-8 cursor-pointer transition-colors ${
+                receiptFile ? 'border-purple-400 bg-purple-50' : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
+              }`}>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  className="hidden"
+                  onChange={e => setReceiptFile(e.target.files?.[0] ?? null)}
+                />
+                {receiptFile ? (
+                  <>
+                    <span className="text-2xl">✅</span>
+                    <span className="text-sm font-medium text-purple-700 text-center">{receiptFile.name}</span>
+                    <span className="text-xs text-gray-400">Hacé clic para cambiar</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
+                    </svg>
+                    <span className="text-sm text-gray-500">Hacé clic para subir el comprobante</span>
+                  </>
+                )}
+              </label>
+            </div>
+
+            <div className="flex flex-col justify-between gap-4">
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-sm text-gray-600 space-y-2">
+                <p>📁 <strong>¿Cómo recibís el acceso?</strong> Confirmado el pago, te enviamos el link de tu carpeta privada de Google Drive con todos los videos. El acceso es permanente.</p>
+                <p>⏱ <strong>Tiempo:</strong> menos de 24 hs hábiles desde que recibimos el comprobante.</p>
+              </div>
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">
                   {error}
                 </div>
               )}
-
               <button
                 onClick={handleSubmit}
                 disabled={loading}
@@ -521,37 +554,9 @@ export default function Home() {
               >
                 {loading ? 'Enviando...' : `Confirmar orden — $${total.toFixed(2)} USD →`}
               </button>
-
               <p className="text-center text-xs text-gray-400">
                 Al confirmar, tu orden queda registrada. El acceso se envía una vez verificado el pago.
               </p>
-            </div>
-
-            {/* Right: order summary */}
-            <div className="md:col-span-2">
-              <div className="bg-white border border-purple-100 rounded-2xl p-5 sticky top-6">
-                <h3 className="font-bold text-gray-900 mb-4">Resumen</h3>
-                <div className="space-y-3 mb-4">
-                  {selectedEntries.map(([catId, tier]) => {
-                    const cat = CATEGORIES.find(c => c.id === catId)!
-                    const t = cat.tiers[tier]
-                    return (
-                      <div key={catId} className="flex justify-between items-start gap-2 text-sm">
-                        <div>
-                          <p className="font-medium text-gray-800">{cat.name}</p>
-                          <p className="text-gray-400 text-xs">{t.label} · {t.courses} cursos · {minutesToLabel(t.minutes)}</p>
-                        </div>
-                        <span className="font-semibold text-gray-800 flex-shrink-0">${t.price.toFixed(2)}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-                <div className="border-t border-gray-200 pt-3 flex justify-between items-center">
-                  <span className="font-bold text-gray-900">Total</span>
-                  <span className="font-extrabold text-purple-700 text-xl">${total.toFixed(2)} USD</span>
-                </div>
-                <p className="text-xs text-gray-400 mt-2">Método: {PAYMENT_METHOD_LABELS[paymentMethod]}</p>
-              </div>
             </div>
           </div>
         </section>
