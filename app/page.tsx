@@ -127,47 +127,54 @@ export default function Home() {
             </div>
 
             {/* ── Right: instructor card ── */}
-            <div className="shrink-0 w-full md:w-72">
+            <div className="shrink-0 w-full md:w-[340px]">
               <a
                 href="https://www.linkedin.com/in/gustavorodriguez-/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-2xl overflow-hidden border border-white/10 hover:border-purple-500/50 transition-all group shadow-xl"
+                className="block rounded-3xl overflow-hidden border border-purple-500/30 hover:border-purple-400/70 transition-all group shadow-2xl shadow-purple-900/40 hover:shadow-purple-700/50"
               >
                 {/* Banner */}
-                <div className="relative h-28 w-full overflow-hidden">
+                <div className="relative h-44 w-full overflow-hidden">
                   <Image
                     src="/gustavo-banner.jpg"
                     alt="Banner Gustavo Rodriguez"
                     fill
-                    className="object-cover object-center"
-                    sizes="288px"
+                    className="object-cover object-center scale-105 group-hover:scale-100 transition-transform duration-500"
+                    sizes="340px"
                   />
-                  <div className="absolute inset-0 bg-black/20" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
                 </div>
 
-                {/* Profile photo — overlapping banner */}
-                <div className="bg-[#13131f] px-5 pb-5">
-                  <div className="relative w-24 h-24 -mt-12 mb-3 rounded-full overflow-hidden ring-4 ring-[#13131f] group-hover:ring-purple-900 transition-all">
+                {/* Content */}
+                <div className="bg-[#0f0f1a] px-6 pb-6">
+                  {/* Photo overlapping */}
+                  <div className="relative w-32 h-32 -mt-16 mb-4 rounded-full overflow-hidden ring-4 ring-[#0f0f1a] group-hover:ring-purple-900/80 transition-all shadow-xl">
                     <Image
                       src="/gustavo.png"
                       alt="Gustavo Rodriguez"
                       fill
                       className="object-cover object-top"
-                      sizes="96px"
+                      sizes="128px"
                     />
                   </div>
-                  <p className="font-bold text-white text-base leading-tight mb-1">
+
+                  <p className="font-extrabold text-white text-xl leading-tight mb-1">
                     Gustavo Rodriguez
                   </p>
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4">
-                    Ex Director Supply Chain Unilever Latam · Consultor · Speaker · Director ITBA
+                  <p className="text-purple-300 text-sm font-semibold mb-2">
+                    Creador del Catálogo Supply Chain
                   </p>
-                  <div className="flex items-center gap-1.5 text-xs text-purple-400 group-hover:text-purple-300 transition-colors font-semibold">
-                    <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <p className="text-gray-400 text-sm leading-relaxed mb-5">
+                    Ex Director SC Unilever Latam · Consultor · Speaker · Director ITBA · 12.500+ seguidores
+                  </p>
+
+                  {/* LinkedIn button */}
+                  <div className="flex items-center gap-2 bg-[#0A66C2] hover:bg-[#0856a8] transition-colors text-white font-bold text-sm px-4 py-2.5 rounded-xl w-fit">
+                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
-                    Ver perfil en LinkedIn →
+                    Ver perfil en LinkedIn
                   </div>
                 </div>
               </a>
