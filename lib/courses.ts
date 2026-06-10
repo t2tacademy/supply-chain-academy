@@ -28,9 +28,9 @@ export const CATEGORIES: Category[] = [
     icon: '🔗',
     description: 'Visión estratégica, KPIs, reporting y mindset ganador.',
     tiers: {
-      starter: { label: 'Starter', courses: 5,  minutes: 54,  price: 1,  listPrice: 2,  savings: 30, driveLink: process.env.DRIVE_SC_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 12, minutes: 174, price: 17, listPrice: 25, savings: 31, driveLink: process.env.DRIVE_SC_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 20, minutes: 280, price: 30, listPrice: 46, savings: 34, driveLink: process.env.DRIVE_SC_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 5,  minutes: 54,  price: 14, listPrice: 14, savings: 0,  driveLink: process.env.DRIVE_SC_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 12, minutes: 174, price: 40, listPrice: 47, savings: 15, driveLink: process.env.DRIVE_SC_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 20, minutes: 280, price: 64, listPrice: 85, savings: 25, driveLink: process.env.DRIVE_SC_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
@@ -67,9 +67,9 @@ export const CATEGORIES: Category[] = [
     icon: '🏭',
     description: 'Gestión de plantas, pérdidas, KPIs y mejora continua.',
     tiers: {
-      starter: { label: 'Starter', courses: 7,  minutes: 88,  price: 6,  listPrice: 8,  savings: 30, driveLink: process.env.DRIVE_MAN_STARTER || '#' },
-      pro:     { label: 'Pro',     courses: 11, minutes: 169, price: 13, listPrice: 19, savings: 33, driveLink: process.env.DRIVE_MAN_PRO     || '#' },
-      expert:  { label: 'Expert',  courses: 15, minutes: 244, price: 30, listPrice: 45, savings: 33, driveLink: process.env.DRIVE_MAN_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 7,  minutes: 88,  price: 33, listPrice: 33, savings: 0,  driveLink: process.env.DRIVE_MAN_STARTER || '#' },
+      pro:     { label: 'Pro',     courses: 11, minutes: 169, price: 41, listPrice: 48, savings: 15, driveLink: process.env.DRIVE_MAN_PRO     || '#' },
+      expert:  { label: 'Expert',  courses: 15, minutes: 244, price: 58, listPrice: 77, savings: 25, driveLink: process.env.DRIVE_MAN_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
@@ -101,9 +101,9 @@ export const CATEGORIES: Category[] = [
     icon: '📦',
     description: 'Inventarios, safety stock, análisis ABC y herramientas avanzadas.',
     tiers: {
-      starter: { label: 'Starter', courses: 5,  minutes: 56,  price: 6,  listPrice: 9,  savings: 30, driveLink: process.env.DRIVE_STK_STARTER || '#' },
-      pro:     { label: 'Pro',     courses: 9,  minutes: 112, price: 11, listPrice: 17, savings: 34, driveLink: process.env.DRIVE_STK_PRO     || '#' },
-      expert:  { label: 'Expert',  courses: 13, minutes: 292, price: 49, listPrice: 72, savings: 32, driveLink: process.env.DRIVE_STK_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 5,  minutes: 56,  price: 12, listPrice: 12, savings: 0,  driveLink: process.env.DRIVE_STK_STARTER || '#' },
+      pro:     { label: 'Pro',     courses: 9,  minutes: 112, price: 23, listPrice: 27, savings: 15, driveLink: process.env.DRIVE_STK_PRO     || '#' },
+      expert:  { label: 'Expert',  courses: 13, minutes: 292, price: 62, listPrice: 83, savings: 25, driveLink: process.env.DRIVE_STK_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
@@ -133,9 +133,9 @@ export const CATEGORIES: Category[] = [
     icon: '📊',
     description: 'Sales & Operations Planning, demand planning y sincronía organizacional.',
     tiers: {
-      starter: { label: 'Starter', courses: 5,  minutes: 58,  price: 6,  listPrice: 9,  savings: 30, driveLink: process.env.DRIVE_SOP_STARTER || '#' },
-      pro:     { label: 'Pro',     courses: 11, minutes: 153, price: 22, listPrice: 33, savings: 32, driveLink: process.env.DRIVE_SOP_PRO     || '#' },
-      expert:  { label: 'Expert',  courses: 13, minutes: 181, price: 24, listPrice: 37, savings: 36, driveLink: process.env.DRIVE_SOP_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 5,  minutes: 58,  price: 12, listPrice: 12, savings: 0,  driveLink: process.env.DRIVE_SOP_STARTER || '#' },
+      pro:     { label: 'Pro',     courses: 11, minutes: 153, price: 36, listPrice: 42, savings: 15, driveLink: process.env.DRIVE_SOP_PRO     || '#' },
+      expert:  { label: 'Expert',  courses: 13, minutes: 181, price: 38, listPrice: 51, savings: 25, driveLink: process.env.DRIVE_SOP_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
@@ -165,9 +165,9 @@ export const CATEGORIES: Category[] = [
     icon: '📈',
     description: 'Rol, herramientas, forecast, portfolio y secretos de performance.',
     tiers: {
-      starter: { label: 'Starter', courses: 5,  minutes: 74,  price: 11, listPrice: 16, savings: 30, driveLink: process.env.DRIVE_DP_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 10, minutes: 170, price: 21, listPrice: 32, savings: 34, driveLink: process.env.DRIVE_DP_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 20, minutes: 451, price: 57, listPrice: 85, savings: 33, driveLink: process.env.DRIVE_DP_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 5,  minutes: 74,  price: 24, listPrice: 24, savings: 0,  driveLink: process.env.DRIVE_DP_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 10, minutes: 170, price: 46, listPrice: 54, savings: 15, driveLink: process.env.DRIVE_DP_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 20, minutes: 451, price: 96, listPrice: 128, savings: 25, driveLink: process.env.DRIVE_DP_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
@@ -204,9 +204,9 @@ export const CATEGORIES: Category[] = [
     icon: '🗓️',
     description: 'MPS, planeamiento estratégico, SKU management y gestión de producto.',
     tiers: {
-      starter: { label: 'Starter', courses: 4,  minutes: 77,  price: 10, listPrice: 14, savings: 30, driveLink: process.env.DRIVE_SP_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 8,  minutes: 186, price: 26, listPrice: 38, savings: 33, driveLink: process.env.DRIVE_SP_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 16, minutes: 326, price: 43, listPrice: 66, savings: 34, driveLink: process.env.DRIVE_SP_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 4,  minutes: 77,  price: 18, listPrice: 18, savings: 0,  driveLink: process.env.DRIVE_SP_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 8,  minutes: 186, price: 36, listPrice: 42, savings: 15, driveLink: process.env.DRIVE_SP_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 16, minutes: 326, price: 58, listPrice: 77, savings: 25, driveLink: process.env.DRIVE_SP_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
@@ -239,9 +239,9 @@ export const CATEGORIES: Category[] = [
     icon: '⚙️',
     description: 'Proceso MRP, milk run, relación con proveedores y optimización avanzada.',
     tiers: {
-      starter: { label: 'Starter', courses: 5,  minutes: 67,  price: 4,  listPrice: 6,  savings: 30, driveLink: process.env.DRIVE_PM_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 10, minutes: 168, price: 11, listPrice: 17, savings: 32, driveLink: process.env.DRIVE_PM_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 16, minutes: 285, price: 29, listPrice: 43, savings: 33, driveLink: process.env.DRIVE_PM_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 5,  minutes: 67,  price: 18, listPrice: 18, savings: 0,  driveLink: process.env.DRIVE_PM_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 10, minutes: 168, price: 36, listPrice: 42, savings: 15, driveLink: process.env.DRIVE_PM_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 16, minutes: 285, price: 58, listPrice: 77, savings: 25, driveLink: process.env.DRIVE_PM_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
@@ -274,9 +274,9 @@ export const CATEGORIES: Category[] = [
     icon: '🚀',
     description: 'Liderazgo transformacional, equipos de alto rendimiento y mentoring.',
     tiers: {
-      starter: { label: 'Starter', courses: 9,  minutes: 69,  price: 4,  listPrice: 6,  savings: 30, driveLink: process.env.DRIVE_LSC_STARTER || '#' },
-      pro:     { label: 'Pro',     courses: 24, minutes: 304, price: 35, listPrice: 50, savings: 31, driveLink: process.env.DRIVE_LSC_PRO     || '#' },
-      expert:  { label: 'Expert',  courses: 33, minutes: 503, price: 57, listPrice: 86, savings: 34, driveLink: process.env.DRIVE_LSC_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 9,  minutes: 69,  price: 11, listPrice: 11, savings: 0,  driveLink: process.env.DRIVE_LSC_STARTER || '#' },
+      pro:     { label: 'Pro',     courses: 24, minutes: 304, price: 38, listPrice: 45, savings: 15, driveLink: process.env.DRIVE_LSC_PRO     || '#' },
+      expert:  { label: 'Expert',  courses: 33, minutes: 503, price: 51, listPrice: 68, savings: 25, driveLink: process.env.DRIVE_LSC_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
@@ -326,9 +326,9 @@ export const CATEGORIES: Category[] = [
     icon: '🧠',
     description: 'Productividad, inteligencia emocional, creatividad y herramientas profesionales.',
     tiers: {
-      starter: { label: 'Starter', courses: 6,  minutes: 67,  price: 4,  listPrice: 6,  savings: 30, driveLink: process.env.DRIVE_HB_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 9,  minutes: 267, price: 32, listPrice: 46, savings: 31, driveLink: process.env.DRIVE_HB_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 12, minutes: 419, price: 60, listPrice: 90, savings: 33, driveLink: process.env.DRIVE_HB_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 6,  minutes: 67,  price: 9,  listPrice: 9,  savings: 0,  driveLink: process.env.DRIVE_HB_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 9,  minutes: 267, price: 26, listPrice: 31, savings: 15, driveLink: process.env.DRIVE_HB_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 12, minutes: 419, price: 39, listPrice: 52, savings: 25, driveLink: process.env.DRIVE_HB_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
@@ -360,15 +360,28 @@ export function minutesToLabel(min: number): string {
   return m > 0 ? `${h}h ${m}min` : `${h}h`
 }
 
-// Totals for global level cards
+// Bundle prices when buying all 9 categories at the same level
+// listPrice = sum of individual category prices (what you'd pay buying each separately)
+export const BUNDLE_PRICES: Record<TierKey, { price: number; listPrice: number }> = {
+  starter: { price: 79,  listPrice: 151 }, // 14+33+12+12+24+18+18+11+9
+  pro:     { price: 109, listPrice: 322 }, // 40+41+23+36+46+36+36+38+26
+  expert:  { price: 139, listPrice: 524 }, // 64+58+62+38+96+58+58+51+39
+}
+
+// Totals for global level cards (uses bundle prices + real course/minute counts)
 export function getLevelTotals(tier: TierKey) {
-  return CATEGORIES.reduce(
+  const bundle = BUNDLE_PRICES[tier]
+  const totals = CATEGORIES.reduce(
     (acc, cat) => ({
-      price:     acc.price     + cat.tiers[tier].price,
-      listPrice: acc.listPrice + cat.tiers[tier].listPrice,
-      courses:   acc.courses   + cat.tiers[tier].courses,
-      minutes:   acc.minutes   + cat.tiers[tier].minutes,
+      courses: acc.courses + cat.tiers[tier].courses,
+      minutes: acc.minutes + cat.tiers[tier].minutes,
     }),
-    { price: 0, listPrice: 0, courses: 0, minutes: 0 }
+    { courses: 0, minutes: 0 }
   )
+  return {
+    price:     bundle.price,
+    listPrice: bundle.listPrice,
+    courses:   totals.courses,
+    minutes:   totals.minutes,
+  }
 }

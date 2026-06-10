@@ -6,7 +6,7 @@ import { CATEGORIES } from '@/lib/courses'
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { customerName, customerEmail, customerPhone, selections, paymentMethod, receiptBase64, receiptContentType, receiptFileName } = body
+    const { customerName, customerEmail, customerPhone, selections, paymentMethod, bundlePrice, receiptBase64, receiptContentType, receiptFileName } = body
 
     if (!customerName || !customerEmail || !selections || selections.length === 0) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       }
     })
 
-    const totalUsd = enrichedSelections.reduce((sum: number, s: { price: number }) => sum + s.price, 0)
+    const totalUsd = bundlePrice ?? enrichedSelections.reduce((sum: number, s: { price: number }) => sum + s.price, 0)
 
     // Upload receipt to Supabase Storage
     let comprobante_url: string | null = null

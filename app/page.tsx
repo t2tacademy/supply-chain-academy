@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel } from '@/lib/courses'
+import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel, BUNDLE_PRICES } from '@/lib/courses'
 import CategoryCompareTable from '@/components/CategoryCompareTable'
 import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
 import StatsSection from '@/components/StatsSection'
@@ -61,10 +61,19 @@ export default function Home() {
   const selectedEntries = Object.entries(selections)
   const itemCount = selectedEntries.length
 
-  const total = selectedEntries.reduce((sum, [catId, tier]) => {
-    const cat = CATEGORIES.find(c => c.id === catId)
-    return sum + (cat?.tiers[tier]?.price ?? 0)
-  }, 0)
+  // Detect full-bundle selection (all 9 categories at the same tier)
+  const bundleTier: TierKey | null = (() => {
+    if (selectedEntries.length !== CATEGORIES.length) return null
+    const tier = selectedEntries[0]?.[1]
+    return selectedEntries.every(([, t]) => t === tier) ? tier as TierKey : null
+  })()
+
+  const total = bundleTier
+    ? BUNDLE_PRICES[bundleTier].price
+    : selectedEntries.reduce((sum, [catId, tier]) => {
+        const cat = CATEGORIES.find(c => c.id === catId)
+        return sum + (cat?.tiers[tier]?.price ?? 0)
+      }, 0)
 
   const handleSelect = (categoryId: string, tier: TierKey | null) => {
     setSelections(prev => {
@@ -118,6 +127,7 @@ export default function Home() {
           customerPhone,
           selections: selectionsPayload,
           paymentMethod,
+          bundlePrice: bundleTier ? BUNDLE_PRICES[bundleTier].price : undefined,
           receiptBase64,
           receiptContentType: receiptFile.type,
           receiptFileName: receiptFile.name,
@@ -349,11 +359,11 @@ export default function Home() {
                       {ICONS[tier]} {NAMES[tier]}
                     </div>
                     <div className="font-extrabold text-2xl text-purple-700 leading-none mb-1">
-                      ${totals.price.toFixed(2)}
+                      ${totals.price}
                       <span className="text-xs font-normal text-gray-400 ml-1">USD</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-2">
-                      <span className="text-xs text-gray-400 line-through">Lista ${totals.listPrice.toFixed(2)}</span>
+                      <span className="text-xs text-gray-400 line-through">Lista ${totals.listPrice}</span>
                       <span className="text-xs font-semibold text-emerald-600">Ahorrás {savingsPct}%</span>
                     </div>
                     <p className="text-xs text-gray-400">{totals.courses} cursos · {minutesToLabel(totals.minutes)}</p>
@@ -475,23 +485,35 @@ export default function Home() {
             <div className="md:col-span-2 bg-white border border-purple-100 rounded-2xl p-5 shadow-sm">
               <h3 className="font-bold text-gray-900 mb-4">Resumen</h3>
               <div className="space-y-3 mb-4">
-                {selectedEntries.map(([catId, tier]) => {
-                  const cat = CATEGORIES.find(c => c.id === catId)!
-                  const t = cat.tiers[tier]
-                  return (
-                    <div key={catId} className="flex justify-between items-start gap-2 text-sm">
-                      <div>
-                        <p className="font-medium text-gray-800">{cat.name}</p>
-                        <p className="text-gray-400 text-xs">{t.label} · {t.courses} cursos · {minutesToLabel(t.minutes)}</p>
-                      </div>
-                      <span className="font-semibold text-gray-800 flex-shrink-0">${t.price.toFixed(2)}</span>
+                {bundleTier ? (
+                  <div className="flex justify-between items-start gap-2 text-sm">
+                    <div>
+                      <p className="font-medium text-gray-800">Catálogo Completo</p>
+                      <p className="text-gray-400 text-xs">
+                        {bundleTier === 'starter' ? 'Starter' : bundleTier === 'pro' ? 'Pro' : 'Expert'} · 9 especializaciones · {minutesToLabel(getLevelTotals(bundleTier).minutes)}
+                      </p>
                     </div>
-                  )
-                })}
+                    <span className="font-semibold text-gray-800 flex-shrink-0">${BUNDLE_PRICES[bundleTier].price}</span>
+                  </div>
+                ) : (
+                  selectedEntries.map(([catId, tier]) => {
+                    const cat = CATEGORIES.find(c => c.id === catId)!
+                    const t = cat.tiers[tier]
+                    return (
+                      <div key={catId} className="flex justify-between items-start gap-2 text-sm">
+                        <div>
+                          <p className="font-medium text-gray-800">{cat.name}</p>
+                          <p className="text-gray-400 text-xs">{t.label} · {t.courses} cursos · {minutesToLabel(t.minutes)}</p>
+                        </div>
+                        <span className="font-semibold text-gray-800 flex-shrink-0">${t.price}</span>
+                      </div>
+                    )
+                  })
+                )}
               </div>
               <div className="border-t border-gray-200 pt-3 flex justify-between items-center">
                 <span className="font-bold text-gray-900">Total</span>
-                <span className="font-extrabold text-purple-700 text-xl">${total.toFixed(2)} USD</span>
+                <span className="font-extrabold text-purple-700 text-xl">${total} USD</span>
               </div>
               <p className="text-xs text-gray-400 mt-2">Método: {PAYMENT_METHOD_LABELS[paymentMethod]}</p>
             </div>
@@ -552,7 +574,7 @@ export default function Home() {
                 disabled={loading}
                 className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-60 text-white font-bold py-4 rounded-xl text-base transition-colors"
               >
-                {loading ? 'Enviando...' : `Confirmar orden — $${total.toFixed(2)} USD →`}
+                {loading ? 'Enviando...' : `Confirmar orden — $${total} USD →`}
               </button>
               <p className="text-center text-xs text-gray-400">
                 Al confirmar, tu orden queda registrada. El acceso se envía una vez verificado el pago.
@@ -589,7 +611,7 @@ export default function Home() {
                   {itemCount} especialización{itemCount > 1 ? 'es' : ''}
                 </span>
                 <span className="text-gray-400 mx-2">·</span>
-                <span className="text-white font-extrabold text-lg sm:text-xl">${total.toFixed(2)} USD</span>
+                <span className="text-white font-extrabold text-lg sm:text-xl">${total} USD</span>
               </div>
               <div className="flex gap-3 items-center">
                 <button

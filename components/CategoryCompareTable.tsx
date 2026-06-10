@@ -120,7 +120,7 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
                 return (
                   <td key={tier} onClick={() => toggle(tier)} className={`p-4 text-center ${colClass(tier)}`}>
                     <span className={`font-extrabold text-xl ${isSelected ? 'text-purple-700' : 'text-gray-800'}`}>
-                      ${t.price.toFixed(2)}
+                      ${t.price}
                     </span>
                     <span className="text-xs text-gray-400 ml-1">USD</span>
                   </td>
@@ -130,13 +130,19 @@ export default function CategoryCompareTable({ selections, onSelect }: Props) {
 
             {/* ── Precio lista + ahorro ── */}
             <tr className="border-b border-gray-100">
-              <td className="p-4 text-sm font-semibold text-gray-600 bg-gray-50/60">Precio lista</td>
+              <td className="p-4 text-sm font-semibold text-gray-600 bg-gray-50/60">Descuento</td>
               {TIERS.map(tier => {
                 const t = cat.tiers[tier]
                 return (
                   <td key={tier} onClick={() => toggle(tier)} className={`p-4 text-center ${colClass(tier)}`}>
-                    <span className="text-xs text-gray-400 line-through">${t.listPrice.toFixed(2)}</span>
-                    <span className="text-xs font-bold text-emerald-600 ml-1.5">−{t.savings}%</span>
+                    {t.savings > 0 ? (
+                      <>
+                        <span className="text-xs text-gray-400 line-through">${t.listPrice}</span>
+                        <span className="text-xs font-bold text-emerald-600 ml-1.5">−{t.savings}%</span>
+                      </>
+                    ) : (
+                      <span className="text-xs text-gray-400">Precio base</span>
+                    )}
                   </td>
                 )
               })}
