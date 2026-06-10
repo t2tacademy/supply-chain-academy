@@ -229,39 +229,20 @@ export default function Home() {
           {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Contacto: WhatsApp + Email */}
-          <div className="flex items-center gap-3">
-            {/* WhatsApp */}
-            <a
-              href={`https://wa.me/5491134030955?text=${encodeURIComponent('¡Hola Gustavo! 👋 Estuve viendo el Catálogo Supply Chain y me parece una oportunidad increíble. Me gustaría saber más sobre los módulos y cómo empezar. ¡Muchas gracias!')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
-            >
-              <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-green-500/20 transition-colors flex items-center justify-center shrink-0">
-                <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.549 4.107 1.51 5.836L0 24l6.335-1.484A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.371l-.36-.214-3.722.872.938-3.63-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
-                </svg>
-              </div>
-              <span className="text-sm hidden sm:block">+54 9 11 3403-0955</span>
-            </a>
-
-            {/* Email — abre Gmail en nueva pestaña */}
-            <a
-              href={`https://mail.google.com/mail/?view=cm&to=t2tscacademy@gmail.com&su=${encodeURIComponent('Consulta — Catálogo Supply Chain')}&body=${encodeURIComponent('¡Hola Gustavo! 👋\n\nEstuve viendo el Catálogo Supply Chain y me parece una oportunidad increíble para potenciar mi carrera. Me entusiasmó mucho la propuesta — especialmente la combinación de experiencia real con formación práctica.\n\nMe gustaría saber más sobre los módulos disponibles y cómo puedo empezar. ¿Podés contarme los próximos pasos?\n\n¡Muchas gracias y saludos!')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
-            >
-              <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-purple-500/20 transition-colors flex items-center justify-center shrink-0">
-                <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                </svg>
-              </div>
-              <span className="text-sm hidden sm:block">t2tscacademy@gmail.com</span>
-            </a>
-          </div>
+          {/* Email */}
+          <a
+            href={`https://mail.google.com/mail/?view=cm&to=t2tscacademy@gmail.com&su=${encodeURIComponent('Consulta — Catálogo Supply Chain')}&body=${encodeURIComponent('¡Hola Gustavo! 👋\n\nEstuve viendo el Catálogo Supply Chain y me parece una oportunidad increíble para potenciar mi carrera. Me entusiasmó mucho la propuesta — especialmente la combinación de experiencia real con formación práctica.\n\nMe gustaría saber más sobre los módulos disponibles y cómo puedo empezar. ¿Podés contarme los próximos pasos?\n\n¡Muchas gracias y saludos!')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors group"
+          >
+            <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-purple-500/20 transition-colors flex items-center justify-center shrink-0">
+              <svg className="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+            </div>
+            <span className="text-sm hidden sm:block">t2tscacademy@gmail.com</span>
+          </a>
         </div>
       </nav>
 
@@ -846,6 +827,23 @@ export default function Home() {
       )}
 
       {cartActive && formState === 'catalog' && <div className="h-24" />}
+
+      {/* ─── WHATSAPP FLOTANTE ─── */}
+      {formState !== 'success' && (
+        <a
+          href={`https://wa.me/5491134030955?text=${encodeURIComponent('¡Hola Gustavo! 👋 Estuve viendo el Catálogo Supply Chain y me parece una oportunidad increíble. Me gustaría saber más sobre los módulos y cómo empezar. ¡Muchas gracias!')}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`fixed z-50 flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold shadow-lg hover:shadow-xl transition-all rounded-full group ${cartActive && formState === 'catalog' ? 'bottom-24 right-4 sm:right-6' : 'bottom-6 right-4 sm:right-6'}`}
+          style={{ padding: '12px 20px 12px 14px' }}
+        >
+          <svg className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.549 4.107 1.51 5.836L0 24l6.335-1.484A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.371l-.36-.214-3.722.872.938-3.63-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+          </svg>
+          <span className="text-sm hidden sm:block">Consultar por WhatsApp</span>
+        </a>
+      )}
 
       {/* ─── FOOTER ─── */}
       <footer className="bg-[#0A0A0F] text-gray-500 text-center py-8 text-sm border-t border-gray-800">

@@ -13,14 +13,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://supply-chain-academy-git-main-tomas2401-s-projects.vercel.app'),
   title: "Catálogo Supply Chain — T2T Academy",
-  description: "Formación práctica en Supply Chain, Manufactura, Stocks, S&OP, Demand Planning y más. 59 cursos, 7 especializaciones.",
+  description: "59 cursos únicos, 7 especializaciones. Formación práctica en Supply Chain basada en +20 años de experiencia real. ~50% de descuento.",
   icons: {
     icon: [
       { url: '/favicon.ico' },
       { url: '/favicon-256.png', sizes: '256x256', type: 'image/png' },
     ],
     apple: '/favicon-256.png',
+  },
+  openGraph: {
+    title: 'Catálogo Supply Chain — T2T Academy',
+    description: '59 cursos únicos, 7 especializaciones. Formación práctica basada en +20 años de experiencia real. ~50% de descuento.',
+    type: 'website',
+    locale: 'es_AR',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Catálogo Supply Chain — T2T Academy',
+    description: '59 cursos únicos, 7 especializaciones. Formación práctica basada en +20 años de experiencia real.',
   },
 };
 
