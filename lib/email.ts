@@ -26,7 +26,7 @@ export async function sendAdminNotification(order: {
   const approveUrl = `${BASE_URL}/api/approve/${order.approveToken}`
 
   await getResend().emails.send({
-    from: 'T2T Academy <noreply@t2tacademy.com>',
+    from: 'T2T Academy <onboarding@resend.dev>',
     to: ADMIN_EMAIL,
     subject: `🛒 Nueva compra: ${order.customerName} — $${order.totalUsd.toFixed(2)} USD`,
     html: `
@@ -91,7 +91,7 @@ export async function sendCustomerAccess(order: {
     .join('')
 
   await getResend().emails.send({
-    from: 'T2T Academy <noreply@t2tacademy.com>',
+    from: 'T2T Academy <onboarding@resend.dev>',
     to: order.customerEmail,
     subject: '🎉 ¡Tu acceso a los cursos de Supply Chain está listo!',
     html: `
