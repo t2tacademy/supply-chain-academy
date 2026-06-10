@@ -28,11 +28,13 @@ export const metadata: Metadata = {
     description: '59 cursos únicos, 7 especializaciones. Formación práctica basada en +20 años de experiencia real. ~50% de descuento.',
     type: 'website',
     locale: 'es_AR',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Catálogo Supply Chain — T2T Academy' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Catálogo Supply Chain — T2T Academy',
     description: '59 cursos únicos, 7 especializaciones. Formación práctica basada en +20 años de experiencia real.',
+    images: ['/og-image.png'],
   },
 };
 
