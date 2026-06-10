@@ -14,7 +14,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Catálogo Supply Chain — T2T Academy",
-  description: "Formación práctica en Supply Chain, Manufactura, Stocks, S&OP, Demand Planning y más. 158 cursos, 9 especializaciones.",
+  description: "Formación práctica en Supply Chain, Manufactura, Stocks, S&OP, Demand Planning y más. 59 cursos, 7 especializaciones.",
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-256.png', sizes: '256x256', type: 'image/png' },
+    ],
+    apple: '/favicon-256.png',
+  },
 };
 
 export default function RootLayout({
