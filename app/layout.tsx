@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://supply-chain-academy-git-main-tomas2401-s-projects.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://supply-chain-academy.vercel.app'),
   title: "Catálogo Supply Chain — T2T Academy",
   description: "59 cursos únicos, 7 especializaciones. Formación práctica en Supply Chain basada en +20 años de experiencia real. ~50% de descuento.",
   icons: {
