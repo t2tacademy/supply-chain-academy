@@ -117,8 +117,9 @@ export default function Home() {
       if (data.verified) {
         setUpgradeVerified(true)
         setUpgradeVerifiedInfo({ orderId: data.orderId, orderDate: data.orderDate })
+        setCustomerEmail(upgradePrevEmail.trim())
         setFormState('checkout')
-        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+        setTimeout(() => document.getElementById('checkout-section')?.scrollIntoView({ behavior: 'smooth' }), 100)
       } else {
         setUpgradeVerifyError(
           `No encontramos una compra aprobada del nivel ${UPGRADE_PRICES[upgradeType!].from} para ese email. Revisá que sea el mismo email con el que compraste, o contactanos a t2tscacademy@gmail.com`
@@ -524,7 +525,7 @@ export default function Home() {
 
       {/* ─── VERIFY UPGRADE ─── */}
       {formState === 'verify-upgrade' && upgradeType && (
-        <section className="max-w-lg mx-auto px-6 py-16 animate-fade-in">
+        <section id="verify-section" className="max-w-lg mx-auto px-6 py-16 animate-fade-in">
           <button
             onClick={() => setFormState('catalog')}
             className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1 transition-colors mb-8"
@@ -633,11 +634,16 @@ export default function Home() {
                     <input
                       type="email"
                       value={customerEmail}
-                      onChange={e => setCustomerEmail(e.target.value)}
+                      onChange={e => !upgradeVerified && setCustomerEmail(e.target.value)}
                       placeholder="juan@empresa.com"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      readOnly={upgradeVerified}
+                      className={`w-full border rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${upgradeVerified ? 'bg-gray-50 border-gray-200 text-gray-500 cursor-not-allowed' : 'border-gray-300'}`}
                     />
-                    <p className="text-xs text-gray-400 mt-1">Aquí recibirás el link de acceso.</p>
+                    {upgradeVerified ? (
+                      <p className="text-xs text-emerald-600 font-semibold mt-1">✓ Email verificado — debe coincidir con tu compra anterior.</p>
+                    ) : (
+                      <p className="text-xs text-gray-400 mt-1">Aquí recibirás el link de acceso.</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">País</label>
@@ -823,10 +829,10 @@ export default function Home() {
                   onClick={() => {
                     if (upgradeType && !upgradeVerified) {
                       setFormState('verify-upgrade')
-                      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+                      setTimeout(() => document.getElementById('verify-section')?.scrollIntoView({ behavior: 'smooth' }), 100)
                     } else {
                       setFormState('checkout')
-                      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+                      setTimeout(() => document.getElementById('checkout-section')?.scrollIntoView({ behavior: 'smooth' }), 100)
                     }
                   }}
                   className="flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-center text-sm sm:text-base"
