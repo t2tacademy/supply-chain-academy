@@ -8,7 +8,7 @@ import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
 import StatsSection from '@/components/StatsSection'
 
 type Selections = Record<string, TierKey>
-type FormState = 'catalog' | 'checkout' | 'success'
+type FormState = 'catalog' | 'verify-upgrade' | 'checkout' | 'success'
 
 const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   mercadopago:  'Mercado Pago',
@@ -38,6 +38,11 @@ function useCountUp(target: number, delayMs: number = 0) {
 export default function Home() {
   const [selections, setSelections] = useState<Selections>({})
   const [upgradeType, setUpgradeType] = useState<UpgradeKey | null>(null)
+  const [upgradeVerified, setUpgradeVerified] = useState(false)
+  const [upgradePrevEmail, setUpgradePrevEmail] = useState('')
+  const [upgradeVerifying, setUpgradeVerifying] = useState(false)
+  const [upgradeVerifyError, setUpgradeVerifyError] = useState('')
+  const [upgradeVerifiedInfo, setUpgradeVerifiedInfo] = useState<{ orderId: string; orderDate: string } | null>(null)
   const [formState, setFormState] = useState<FormState>('catalog')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('mercadopago')
   const [country, setCountry] = useState<'argentina' | 'internacional'>('argentina')
@@ -82,6 +87,8 @@ export default function Home() {
 
   const handleSelect = (categoryId: string, tier: TierKey | null) => {
     setUpgradeType(null)
+    setUpgradeVerified(false)
+    setUpgradeVerifiedInfo(null)
     setSelections(prev => {
       const next = { ...prev }
       if (tier === null) {
@@ -91,6 +98,37 @@ export default function Home() {
       }
       return next
     })
+  }
+
+  const handleVerifyUpgrade = async () => {
+    if (!upgradePrevEmail.trim()) {
+      setUpgradeVerifyError('Por favor ingresá tu email.')
+      return
+    }
+    setUpgradeVerifying(true)
+    setUpgradeVerifyError('')
+    try {
+      const res = await fetch('/api/verify-upgrade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: upgradePrevEmail.trim(), upgradeType }),
+      })
+      const data = await res.json()
+      if (data.verified) {
+        setUpgradeVerified(true)
+        setUpgradeVerifiedInfo({ orderId: data.orderId, orderDate: data.orderDate })
+        setFormState('checkout')
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+      } else {
+        setUpgradeVerifyError(
+          `No encontramos una compra aprobada del nivel ${UPGRADE_PRICES[upgradeType!].from} para ese email. Revisá que sea el mismo email con el que compraste, o contactanos a t2tscacademy@gmail.com`
+        )
+      }
+    } catch {
+      setUpgradeVerifyError('Error de conexión. Intentá de nuevo.')
+    } finally {
+      setUpgradeVerifying(false)
+    }
   }
 
   const handleSubmit = async () => {
@@ -380,6 +418,8 @@ export default function Home() {
                     key={tier}
                     onClick={() => {
                       setUpgradeType(null)
+                      setUpgradeVerified(false)
+                      setUpgradeVerifiedInfo(null)
                       const next: Record<string, TierKey> = {}
                       CATEGORIES.forEach(c => { next[c.id] = tier })
                       setSelections(next)
@@ -420,6 +460,10 @@ export default function Home() {
                       key={key}
                       onClick={() => {
                         setSelections({})
+                        setUpgradeVerified(false)
+                        setUpgradeVerifiedInfo(null)
+                        setUpgradePrevEmail('')
+                        setUpgradeVerifyError('')
                         setUpgradeType(isActive ? null : key)
                       }}
                       className={`bg-white rounded-xl border-2 p-4 text-left hover:border-amber-400 hover:shadow-md transition-all group ${isActive ? 'border-amber-500 shadow-md' : 'border-amber-100'}`}
@@ -474,6 +518,65 @@ export default function Home() {
 
           <div className="mt-6 bg-white border border-purple-100 rounded-xl p-4 text-xs text-gray-500 text-center">
             ~50% de descuento vs precio de lista. Pro incluye todos los cursos Starter + los propios. Expert incluye todos los niveles. Acceso por 3 meses para descargar desde Google Drive.
+          </div>
+        </section>
+      )}
+
+      {/* ─── VERIFY UPGRADE ─── */}
+      {formState === 'verify-upgrade' && upgradeType && (
+        <section className="max-w-lg mx-auto px-6 py-16 animate-fade-in">
+          <button
+            onClick={() => setFormState('catalog')}
+            className="text-gray-400 hover:text-gray-700 text-sm flex items-center gap-1 transition-colors mb-8"
+          >
+            ← Volver al catálogo
+          </button>
+
+          <div className="bg-white border-2 border-amber-200 rounded-2xl p-8 shadow-sm">
+            <div className="text-4xl mb-4 text-center">🔐</div>
+            <h2 className="text-xl font-extrabold text-gray-900 text-center mb-2">
+              Verificá tu compra anterior
+            </h2>
+            <p className="text-gray-500 text-sm text-center mb-6 leading-relaxed">
+              Para acceder al precio de <span className="font-semibold text-amber-700">{UPGRADE_PRICES[upgradeType].label}</span>, verificamos que tengas el nivel <strong>{UPGRADE_PRICES[upgradeType].from}</strong> activo.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email con el que compraste el nivel {UPGRADE_PRICES[upgradeType].from}
+                </label>
+                <input
+                  type="email"
+                  value={upgradePrevEmail}
+                  onChange={e => { setUpgradePrevEmail(e.target.value); setUpgradeVerifyError('') }}
+                  onKeyDown={e => e.key === 'Enter' && handleVerifyUpgrade()}
+                  placeholder="tu@email.com"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                />
+              </div>
+
+              {upgradeVerifyError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm leading-relaxed">
+                  {upgradeVerifyError}
+                </div>
+              )}
+
+              <button
+                onClick={handleVerifyUpgrade}
+                disabled={upgradeVerifying}
+                className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-60 text-white font-bold py-3 rounded-xl transition-colors"
+              >
+                {upgradeVerifying ? 'Verificando...' : 'Verificar compra anterior →'}
+              </button>
+            </div>
+
+            <p className="text-xs text-gray-400 text-center mt-4">
+              ¿Problemas? Contactanos a{' '}
+              <a href="mailto:t2tscacademy@gmail.com" className="text-amber-600 hover:underline">
+                t2tscacademy@gmail.com
+              </a>
+            </p>
           </div>
         </section>
       )}
@@ -559,6 +662,11 @@ export default function Home() {
                     <div>
                       <p className="font-medium text-gray-800">{UPGRADE_PRICES[upgradeType].label}</p>
                       <p className="text-gray-400 text-xs">Catálogo completo · 7 especializaciones</p>
+                      {upgradeVerifiedInfo && (
+                        <p className="text-xs text-emerald-600 font-semibold mt-0.5">
+                          ✓ Compra anterior verificada · {upgradeVerifiedInfo.orderDate}
+                        </p>
+                      )}
                     </div>
                     <span className="font-semibold text-gray-800 flex-shrink-0">${UPGRADE_PRICES[upgradeType].price}</span>
                   </div>
@@ -700,15 +808,26 @@ export default function Home() {
               </div>
               <div className="flex gap-3 items-center">
                 <button
-                  onClick={() => { setSelections({}); setUpgradeType(null) }}
+                  onClick={() => {
+                    setSelections({})
+                    setUpgradeType(null)
+                    setUpgradeVerified(false)
+                    setUpgradeVerifiedInfo(null)
+                    setUpgradePrevEmail('')
+                  }}
                   className="text-gray-500 hover:text-gray-300 text-sm transition-colors whitespace-nowrap"
                 >
                   Limpiar
                 </button>
                 <button
                   onClick={() => {
-                    setFormState('checkout')
-                    setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100)
+                    if (upgradeType && !upgradeVerified) {
+                      setFormState('verify-upgrade')
+                      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+                    } else {
+                      setFormState('checkout')
+                      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+                    }
                   }}
                   className="flex-1 sm:flex-none bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-center text-sm sm:text-base"
                 >
