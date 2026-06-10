@@ -147,19 +147,33 @@ export default function Home() {
 
       {/* ─── NAVBAR ─── */}
       <nav className="sticky top-0 z-40 bg-[#050E1A] border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center gap-4">
           {/* Logo T2T — link a la plataforma */}
           <a
             href="https://t2tacademy.sabionet.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2.5 group"
+            className="flex items-center gap-2.5 group shrink-0"
           >
             <div className="relative w-10 h-10 shrink-0">
               <Image src="/t2t-logo.jpg" alt="T2T Academy" fill className="object-contain rounded-full group-hover:ring-2 group-hover:ring-purple-400 transition-all" sizes="40px" />
             </div>
             <span className="text-white font-semibold text-sm hidden sm:block group-hover:text-purple-300 transition-colors">Think to Transform · Academy</span>
           </a>
+
+          {/* Promo Habilidades Blandas */}
+          <a
+            href="https://t2tacademy.sabionet.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 bg-purple-900/50 hover:bg-purple-800/60 border border-purple-700/40 text-purple-200 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-full transition-colors whitespace-nowrap"
+          >
+            🧠 <span className="hidden xs:inline sm:inline">Habilidades Blandas →</span>
+            <span className="sm:hidden">HB →</span>
+          </a>
+
+          {/* Spacer */}
+          <div className="flex-1" />
 
           {/* Contacto: WhatsApp + Email */}
           <div className="flex items-center gap-3">
@@ -409,27 +423,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* ─── BANNER T2T ACADEMY APP ─── */}
-      {formState !== 'success' && (
-        <div className="bg-[#050E1A] border-y border-white/5">
-          <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-gray-300 text-sm text-center sm:text-left">
-              ¿Buscás cursos de{' '}
-              <strong className="text-purple-300">habilidades blandas y liderazgo profesional</strong>?
-              {' '}Visitá nuestra academia principal:
-            </p>
-            <a
-              href="https://t2tacademy.sabionet.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 bg-purple-700 hover:bg-purple-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors flex items-center gap-2 whitespace-nowrap"
-            >
-              🧠 T2T Academy — Habilidades Blandas →
-            </a>
-          </div>
-        </div>
-      )}
-
       {/* ─── CHECKOUT ─── */}
       {formState === 'checkout' && (
         <section id="checkout-section" className="max-w-5xl mx-auto px-6 pb-24 animate-fade-in">
@@ -667,8 +660,8 @@ export default function Home() {
         </p>
         <p>
           ¿Consultas?{' '}
-          <a href="mailto:pagos@t2tacademy.com" className="text-purple-400 hover:text-purple-300">
-            pagos@t2tacademy.com
+          <a href="mailto:t2tscacademy@gmail.com" className="text-purple-400 hover:text-purple-300">
+            t2tscacademy@gmail.com
           </a>
         </p>
       </footer>

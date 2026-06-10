@@ -113,7 +113,7 @@ export async function sendCustomerAccess(order: {
           </div>
 
           <p style="color:#6b7280;font-size:13px;margin-top:24px">
-            ¿Alguna consulta? Respondé este email o contactanos en <a href="mailto:pagos@t2tacademy.com">pagos@t2tacademy.com</a>.
+            ¿Alguna consulta? Respondé este email o contactanos en <a href="mailto:t2tscacademy@gmail.com">t2tscacademy@gmail.com</a>.
           </p>
         </div>
       </div>
