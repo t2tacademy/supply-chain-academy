@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel, BUNDLE_PRICES } from '@/lib/courses'
+import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel, BUNDLE_PRICES, UPGRADE_PRICES, UpgradeKey } from '@/lib/courses'
 import CategoryCompareTable from '@/components/CategoryCompareTable'
 import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
 import StatsSection from '@/components/StatsSection'
@@ -37,6 +37,7 @@ function useCountUp(target: number, delayMs: number = 0) {
 
 export default function Home() {
   const [selections, setSelections] = useState<Selections>({})
+  const [upgradeType, setUpgradeType] = useState<UpgradeKey | null>(null)
   const [formState, setFormState] = useState<FormState>('catalog')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('mercadopago')
   const [country, setCountry] = useState<'argentina' | 'internacional'>('argentina')
@@ -61,21 +62,26 @@ export default function Home() {
   const selectedEntries = Object.entries(selections)
   const itemCount = selectedEntries.length
 
-  // Detect full-bundle selection (all 9 categories at the same tier)
+  // Detect full-bundle selection (all 7 categories at the same tier)
   const bundleTier: TierKey | null = (() => {
     if (selectedEntries.length !== CATEGORIES.length) return null
     const tier = selectedEntries[0]?.[1]
     return selectedEntries.every(([, t]) => t === tier) ? tier as TierKey : null
   })()
 
-  const total = bundleTier
+  const total = upgradeType
+    ? UPGRADE_PRICES[upgradeType].price
+    : bundleTier
     ? BUNDLE_PRICES[bundleTier].price
     : selectedEntries.reduce((sum, [catId, tier]) => {
         const cat = CATEGORIES.find(c => c.id === catId)
         return sum + (cat?.tiers[tier]?.price ?? 0)
       }, 0)
 
+  const cartActive = upgradeType !== null || itemCount > 0
+
   const handleSelect = (categoryId: string, tier: TierKey | null) => {
+    setUpgradeType(null)
     setSelections(prev => {
       const next = { ...prev }
       if (tier === null) {
@@ -118,6 +124,12 @@ export default function Home() {
         reader.readAsDataURL(receiptFile)
       })
 
+      const upgradePayload = upgradeType ? {
+        upgradeType,
+        upgradeLabel: UPGRADE_PRICES[upgradeType].label,
+        upgradePrice: UPGRADE_PRICES[upgradeType].price,
+      } : {}
+
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -125,9 +137,12 @@ export default function Home() {
           customerName,
           customerEmail,
           customerPhone,
-          selections: selectionsPayload,
+          selections: upgradeType ? [] : selectionsPayload,
           paymentMethod,
-          bundlePrice: bundleTier ? BUNDLE_PRICES[bundleTier].price : undefined,
+          bundlePrice: upgradeType
+            ? UPGRADE_PRICES[upgradeType].price
+            : bundleTier ? BUNDLE_PRICES[bundleTier].price : undefined,
+          ...upgradePayload,
           receiptBase64,
           receiptContentType: receiptFile.type,
           receiptFileName: receiptFile.name,
@@ -255,7 +270,7 @@ export default function Home() {
             <div className="shrink-0 w-full md:w-[480px]">
               {/* No overflow-hidden on outer so the circle can overlap banner→content */}
               <a
-                href="https://www.linkedin.com/in/gustavorodriguez-/"
+                href="https://www.linkedin.com/in/gustavorodriguezsc/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block rounded-3xl border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
@@ -353,22 +368,29 @@ export default function Home() {
             <p className="text-sm text-gray-500 mb-5">
               Elegí un nivel y llevate las 7 especializaciones. El precio ya incluye el ~50% de descuento.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
               {(['starter', 'pro', 'expert'] as TierKey[]).map(tier => {
                 const totals = getLevelTotals(tier)
                 const savingsPct = Math.round((totals.listPrice - totals.price) / totals.listPrice * 100)
                 const ICONS: Record<TierKey, string> = { starter: '▲', pro: '▲▲', expert: '▲▲▲' }
                 const NAMES: Record<TierKey, string> = { starter: 'STARTER', pro: 'PRO', expert: 'EXPERT' }
+                const isActive = bundleTier === tier && upgradeType === null
                 return (
                   <button
                     key={tier}
                     onClick={() => {
+                      setUpgradeType(null)
                       const next: Record<string, TierKey> = {}
                       CATEGORIES.forEach(c => { next[c.id] = tier })
                       setSelections(next)
                     }}
-                    className="bg-white rounded-2xl border-2 border-purple-100 p-4 text-left hover:border-purple-400 hover:shadow-md transition-all group"
+                    className={`bg-white rounded-2xl border-2 p-4 text-left hover:border-purple-400 hover:shadow-md transition-all group ${isActive ? 'border-purple-500 shadow-md' : 'border-purple-100'}`}
                   >
+                    {isActive && (
+                      <div className="flex justify-start mb-1">
+                        <span className="text-xs font-bold text-white bg-purple-600 px-2 py-0.5 rounded-full">✓ Seleccionado</span>
+                      </div>
+                    )}
                     <div className="text-purple-600 font-bold text-xs tracking-wide mb-2">
                       {ICONS[tier]} {NAMES[tier]}
                     </div>
@@ -385,6 +407,39 @@ export default function Home() {
                   </button>
                 )
               })}
+            </div>
+
+            {/* ── Upgrades ── */}
+            <div className="border-t border-purple-200 pt-4">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">¿Ya tenés un nivel? Upgradeá al siguiente</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {(Object.entries(UPGRADE_PRICES) as [UpgradeKey, typeof UPGRADE_PRICES[UpgradeKey]][]).map(([key, upg]) => {
+                  const isActive = upgradeType === key
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => {
+                        setSelections({})
+                        setUpgradeType(isActive ? null : key)
+                      }}
+                      className={`bg-white rounded-xl border-2 p-4 text-left hover:border-amber-400 hover:shadow-md transition-all group ${isActive ? 'border-amber-500 shadow-md' : 'border-amber-100'}`}
+                    >
+                      {isActive && (
+                        <div className="flex justify-start mb-1">
+                          <span className="text-xs font-bold text-white bg-amber-500 px-2 py-0.5 rounded-full">✓ Seleccionado</span>
+                        </div>
+                      )}
+                      <div className="text-amber-600 font-bold text-xs tracking-wide mb-1">⬆ {upg.label}</div>
+                      <div className="font-extrabold text-xl text-amber-700 leading-none mb-1">
+                        ${upg.price}
+                        <span className="text-xs font-normal text-gray-400 ml-1">USD</span>
+                      </div>
+                      <p className="text-xs text-gray-400">Catálogo completo · {upg.from} → {upg.to}</p>
+                      <p className="text-xs text-amber-600 font-semibold mt-1.5 group-hover:underline">Seleccionar →</p>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
 
@@ -499,12 +554,20 @@ export default function Home() {
             <div className="md:col-span-2 bg-white border border-purple-100 rounded-2xl p-5 shadow-sm">
               <h3 className="font-bold text-gray-900 mb-4">Resumen</h3>
               <div className="space-y-3 mb-4">
-                {bundleTier ? (
+                {upgradeType ? (
+                  <div className="flex justify-between items-start gap-2 text-sm">
+                    <div>
+                      <p className="font-medium text-gray-800">{UPGRADE_PRICES[upgradeType].label}</p>
+                      <p className="text-gray-400 text-xs">Catálogo completo · 7 especializaciones</p>
+                    </div>
+                    <span className="font-semibold text-gray-800 flex-shrink-0">${UPGRADE_PRICES[upgradeType].price}</span>
+                  </div>
+                ) : bundleTier ? (
                   <div className="flex justify-between items-start gap-2 text-sm">
                     <div>
                       <p className="font-medium text-gray-800">Catálogo Completo</p>
                       <p className="text-gray-400 text-xs">
-                        {bundleTier === 'starter' ? 'Starter' : bundleTier === 'pro' ? 'Pro' : 'Expert'} · 9 especializaciones · {minutesToLabel(getLevelTotals(bundleTier).minutes)}
+                        {bundleTier === 'starter' ? 'Starter' : bundleTier === 'pro' ? 'Pro' : 'Expert'} · 7 especializaciones · {minutesToLabel(getLevelTotals(bundleTier).minutes)}
                       </p>
                     </div>
                     <span className="font-semibold text-gray-800 flex-shrink-0">${BUNDLE_PRICES[bundleTier].price}</span>
@@ -618,20 +681,26 @@ export default function Home() {
       )}
 
       {/* ─── FLOATING CART BAR ─── */}
-      {itemCount > 0 && formState === 'catalog' && (
+      {cartActive && formState === 'catalog' && (
         <div className="fixed bottom-0 left-0 right-0 z-50 animate-fade-in">
           <div className="bg-[#0A0A0F] border-t border-purple-900/50 px-4 py-3 sm:px-6 sm:py-4">
             <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
               <div className="text-white">
-                <span className="font-bold text-purple-400 text-base sm:text-lg">
-                  {itemCount} especialización{itemCount > 1 ? 'es' : ''}
-                </span>
+                {upgradeType ? (
+                  <span className="font-bold text-amber-400 text-base sm:text-lg">
+                    {UPGRADE_PRICES[upgradeType].label}
+                  </span>
+                ) : (
+                  <span className="font-bold text-purple-400 text-base sm:text-lg">
+                    {itemCount} especialización{itemCount > 1 ? 'es' : ''}
+                  </span>
+                )}
                 <span className="text-gray-400 mx-2">·</span>
                 <span className="text-white font-extrabold text-lg sm:text-xl">${total} USD</span>
               </div>
               <div className="flex gap-3 items-center">
                 <button
-                  onClick={() => setSelections({})}
+                  onClick={() => { setSelections({}); setUpgradeType(null) }}
                   className="text-gray-500 hover:text-gray-300 text-sm transition-colors whitespace-nowrap"
                 >
                   Limpiar
@@ -651,7 +720,7 @@ export default function Home() {
         </div>
       )}
 
-      {itemCount > 0 && formState === 'catalog' && <div className="h-24" />}
+      {cartActive && formState === 'catalog' && <div className="h-24" />}
 
       {/* ─── FOOTER ─── */}
       <footer className="bg-[#0A0A0F] text-gray-500 text-center py-8 text-sm border-t border-gray-800">
