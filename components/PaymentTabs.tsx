@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-export type PaymentMethod = 'mercadopago' | 'transferencia' | 'paypal' | 'internacional'
+export type PaymentMethod = 'mercadopago' | 'transferencia' | 'bbva-usd' | 'paypal'
 
 interface Props {
   selected: PaymentMethod
@@ -11,10 +11,10 @@ interface Props {
 }
 
 const ALL_TABS: { id: PaymentMethod; label: string; flag: string; countries: ('argentina' | 'internacional')[] }[] = [
-  { id: 'mercadopago',   label: 'Mercado Pago',    flag: '🇦🇷', countries: ['argentina'] },
-  { id: 'transferencia', label: 'Transferencia AR', flag: '🏦', countries: ['argentina'] },
-  { id: 'paypal',        label: 'PayPal',           flag: '🌎', countries: ['argentina', 'internacional'] },
-  { id: 'internacional', label: 'Internacional',    flag: '🌐', countries: ['argentina', 'internacional'] },
+  { id: 'mercadopago',   label: 'Mercado Pago', flag: '🇦🇷', countries: ['argentina'] },
+  { id: 'transferencia', label: 'BBVA Pesos',   flag: '🏦',  countries: ['argentina'] },
+  { id: 'bbva-usd',      label: 'BBVA USD',     flag: '💵',  countries: ['argentina', 'internacional'] },
+  { id: 'paypal',        label: 'PayPal',        flag: '🌎',  countries: ['argentina', 'internacional'] },
 ]
 
 function CopyButton({ text }: { text: string }) {
@@ -78,51 +78,49 @@ export default function PaymentTabs({ selected, onSelect, country = 'argentina' 
       <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
         {selected === 'mercadopago' && (
           <div>
-            <Row label="Alias" value="T2T.ACADEMY.MP" />
-            <Row label="CVU" value="COMPLETAR_CVU_MP" />
+            <Row label="Alias" value="puma.tara.antes.mp" />
+            <Row label="CVU" value="0000003100067943060793" />
             <Row label="Titular" value="Gustavo Rodriguez" />
             <InfoBox>
-              Mercado Pago acepta tarjetas de crédito/débito en cuotas. Podés pagar desde cualquier país de LATAM.
+              Mercado Pago acepta tarjetas de crédito/débito. El pago es en pesos al tipo de cambio oficial del día.
             </InfoBox>
           </div>
         )}
 
         {selected === 'transferencia' && (
           <div>
-            <Row label="Banco" value="COMPLETAR_NOMBRE_BANCO" />
-            <Row label="CBU" value="COMPLETAR_CBU" />
-            <Row label="Alias" value="T2T.ACADEMY" />
-            <Row label="CUIT" value="COMPLETAR_CUIT" />
+            <Row label="Banco" value="BBVA" />
+            <Row label="CBU" value="0170075640000075295354" />
+            <Row label="Alias" value="GER1499" />
             <Row label="Titular" value="Gustavo Rodriguez" />
             <InfoBox>
-              Transferencia en pesos argentinos. El precio se convierte al tipo de cambio oficial del día.
+              Transferencia en pesos argentinos (ARS). El precio en USD se convierte al tipo de cambio oficial del día.
+            </InfoBox>
+          </div>
+        )}
+
+        {selected === 'bbva-usd' && (
+          <div>
+            <Row label="Banco" value="BBVA" />
+            <Row label="CBU" value="0170075640000074817786" />
+            <Row label="Alias" value="GER1499u" />
+            <Row label="Titular" value="Gustavo Rodriguez" />
+            <InfoBox>
+              Cuenta en dólares (USD). Transferí el importe exacto en USD. Disponible para Argentina y el exterior.
             </InfoBox>
           </div>
         )}
 
         {selected === 'paypal' && (
           <div>
-            <Row label="Email PayPal" value="t2tscacademy@gmail.com" />
+            <Row label="Usuario" value="@gustrodriguez" />
             <div className="flex items-center justify-between py-3 border-b border-gray-100 gap-4">
               <span className="text-gray-500 text-sm font-medium w-24 flex-shrink-0">Link directo</span>
-              <a href="https://paypal.me/t2tacademy" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm flex-1">paypal.me/t2tacademy</a>
-              <CopyButton text="paypal.me/t2tacademy" />
+              <a href="https://paypal.me/gustrodriguez" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm flex-1">paypal.me/gustrodriguez</a>
+              <CopyButton text="paypal.me/gustrodriguez" />
             </div>
             <InfoBox>
               Pagá en USD desde cualquier país. Seleccioná &quot;envío a amigos&quot; para evitar comisiones adicionales.
-            </InfoBox>
-          </div>
-        )}
-
-        {selected === 'internacional' && (
-          <div>
-            <Row label="Banco" value="COMPLETAR_BANCO — Sucursal COMPLETAR" />
-            <Row label="SWIFT/BIC" value="COMPLETAR_SWIFT" />
-            <Row label="IBAN/Cuenta" value="COMPLETAR_IBAN" />
-            <Row label="Titular" value="Gustavo Rodriguez" />
-            <Row label="Dirección" value="Buenos Aires, Argentina" />
-            <InfoBox>
-              Para transferencias desde México, Colombia, Perú, Chile, Uruguay y Brasil. Usá el precio en USD.
             </InfoBox>
           </div>
         )}
@@ -130,7 +128,8 @@ export default function PaymentTabs({ selected, onSelect, country = 'argentina' 
 
       {/* How you receive access */}
       <div className="mt-4 bg-gray-100 rounded-xl p-4 text-sm text-gray-700 space-y-1">
-        <p>📁 <strong>¿Cómo recibís los cursos?</strong> Una vez confirmado el pago, te enviamos el link de tu carpeta de Google Drive con todos los videos del pack al email que ingresaste. El acceso es permanente.</p>
+        <p>📁 <strong>¿Cómo recibís los cursos?</strong> Una vez confirmado el pago, te enviamos el link de tu carpeta de Google Drive al email que ingresaste.</p>
+        <p>⏳ <strong>Acceso:</strong> tenés <strong>3 meses para descargar</strong> los videos desde la fecha de activación.</p>
         <p>⏱ <strong>Tiempo de activación:</strong> menos de 24 horas hábiles desde que recibimos el comprobante.</p>
       </div>
     </div>

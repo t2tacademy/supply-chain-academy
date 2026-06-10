@@ -11,10 +11,10 @@ type Selections = Record<string, TierKey>
 type FormState = 'catalog' | 'checkout' | 'success'
 
 const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
-  mercadopago: 'Mercado Pago',
-  transferencia: 'Transferencia bancaria AR',
-  paypal: 'PayPal',
-  internacional: 'Transferencia internacional',
+  mercadopago:  'Mercado Pago',
+  transferencia: 'BBVA Pesos (ARS)',
+  'bbva-usd':   'BBVA Dólares (USD)',
+  paypal:       'PayPal',
 }
 
 function useCountUp(target: number, delayMs: number = 0) {
@@ -50,12 +50,12 @@ export default function Home() {
   const handleCountryChange = (c: 'argentina' | 'internacional') => {
     setCountry(c)
     if (c === 'internacional' && (paymentMethod === 'mercadopago' || paymentMethod === 'transferencia')) {
-      setPaymentMethod('paypal')
+      setPaymentMethod('bbva-usd')
     }
   }
 
-  const heroCount158 = useCountUp(158, 400)
-  const heroCount9   = useCountUp(9,   600)
+  const heroCount59  = useCountUp(59,  400)
+  const heroCount7   = useCountUp(7,   600)
   const heroCount20  = useCountUp(20,  800)
 
   const selectedEntries = Object.entries(selections)
@@ -222,9 +222,9 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-10 mb-10">
                 {[
-                  { num: heroCount158,      suffix: '',  label: 'cursos disponibles' },
-                  { num: heroCount9,        suffix: '',  label: 'especializaciones'  },
-                  { num: heroCount20,       suffix: '+', label: 'años de experiencia'},
+                  { num: heroCount59,  suffix: '',  label: 'cursos únicos'      },
+                  { num: heroCount7,   suffix: '',  label: 'especializaciones'  },
+                  { num: heroCount20,  suffix: '+', label: 'años de experiencia'},
                 ].map(stat => (
                   <div key={stat.label} className="text-center">
                     <div className="text-3xl font-extrabold text-purple-400 tabular-nums">{stat.num}{stat.suffix}</div>
@@ -307,7 +307,7 @@ export default function Home() {
             {[
               { step: '01', icon: '🎯', title: 'Elegí tu camino', desc: 'Seleccioná una o varias especializaciones y el nivel (Starter, Pro o Expert) que necesitás.' },
               { step: '02', icon: '💳', title: 'Realizá el pago', desc: 'Transferí por CBU, Mercado Pago, PayPal o transferencia internacional al importe total.' },
-              { step: '03', icon: '📁', title: 'Recibí tu acceso', desc: 'En menos de 24 hs hábiles te enviamos el link de Google Drive con todos tus cursos. Acceso permanente.' },
+              { step: '03', icon: '📁', title: 'Descargá tus cursos', desc: 'En menos de 24 hs hábiles te enviamos el link de Google Drive. Tenés 3 meses para descargar todos los videos.' },
             ].map(item => (
               <div key={item.step} className="bg-white rounded-2xl border border-gray-200 p-6 text-center shadow-sm">
                 <div className="text-3xl mb-3">{item.icon}</div>
@@ -337,7 +337,7 @@ export default function Home() {
               <h3 className="font-extrabold text-gray-900 text-lg">Catálogo completo por nivel</h3>
             </div>
             <p className="text-sm text-gray-500 mb-5">
-              Elegí un nivel y llevate las 9 especializaciones. El precio ya incluye el descuento acumulado.
+              Elegí un nivel y llevate las 7 especializaciones. El precio ya incluye el ~50% de descuento.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {(['starter', 'pro', 'expert'] as TierKey[]).map(tier => {
@@ -404,9 +404,30 @@ export default function Home() {
           </div>
 
           <div className="mt-6 bg-white border border-purple-100 rounded-xl p-4 text-xs text-gray-500 text-center">
-            Los precios ya incluyen descuento acumulado. Pro incluye todos los cursos Starter + los propios. Expert incluye todos los niveles.
+            ~50% de descuento vs precio de lista. Pro incluye todos los cursos Starter + los propios. Expert incluye todos los niveles. Acceso por 3 meses para descargar desde Google Drive.
           </div>
         </section>
+      )}
+
+      {/* ─── BANNER T2T ACADEMY APP ─── */}
+      {formState !== 'success' && (
+        <div className="bg-[#050E1A] border-y border-white/5">
+          <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-gray-300 text-sm text-center sm:text-left">
+              ¿Buscás cursos de{' '}
+              <strong className="text-purple-300">habilidades blandas y liderazgo profesional</strong>?
+              {' '}Visitá nuestra academia principal:
+            </p>
+            <a
+              href="https://t2tacademy.sabionet.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 bg-purple-700 hover:bg-purple-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors flex items-center gap-2 whitespace-nowrap"
+            >
+              🧠 T2T Academy — Habilidades Blandas →
+            </a>
+          </div>
+        </div>
       )}
 
       {/* ─── CHECKOUT ─── */}
@@ -561,8 +582,9 @@ export default function Home() {
 
             <div className="flex flex-col justify-between gap-4">
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 text-sm text-gray-600 space-y-2">
-                <p>📁 <strong>¿Cómo recibís el acceso?</strong> Confirmado el pago, te enviamos el link de tu carpeta privada de Google Drive con todos los videos. El acceso es permanente.</p>
-                <p>⏱ <strong>Tiempo:</strong> menos de 24 hs hábiles desde que recibimos el comprobante.</p>
+                <p>📁 <strong>¿Cómo recibís el acceso?</strong> Confirmado el pago, te enviamos el link de tu carpeta de Google Drive con todos los videos.</p>
+                <p>⏳ <strong>Acceso:</strong> tenés <strong>3 meses para descargar</strong> los videos desde la fecha de activación.</p>
+                <p>⏱ <strong>Tiempo de activación:</strong> menos de 24 hs hábiles desde que recibimos el comprobante.</p>
               </div>
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">
@@ -594,8 +616,9 @@ export default function Home() {
               Tu orden fue enviada con éxito. Una vez que confirmemos tu pago (<strong>menos de 24 hs hábiles</strong>), te enviamos los links de acceso a <strong>{customerEmail}</strong>.
             </p>
             <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-purple-800 text-left space-y-1">
-              <p>📁 Recibirás un email con los links de Google Drive para cada especialización.</p>
-              <p>💬 ¿Dudas? Escribinos a <strong>pagos@t2tacademy.com</strong></p>
+              <p>📁 Recibirás un email con el link de tu carpeta de Google Drive.</p>
+              <p>⏳ Tenés <strong>3 meses para descargar</strong> los videos desde la activación.</p>
+              <p>💬 ¿Dudas? Escribinos a <strong>t2tscacademy@gmail.com</strong></p>
             </div>
           </div>
         </section>
