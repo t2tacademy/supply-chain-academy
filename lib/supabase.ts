@@ -40,6 +40,7 @@ export interface Order {
   payment_method: string
   status: 'pending' | 'approved' | 'rejected'
   approve_token: string
+  comprobante_url?: string | null
   created_at: string
   approved_at?: string
 }
