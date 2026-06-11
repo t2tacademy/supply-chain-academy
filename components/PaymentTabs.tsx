@@ -97,12 +97,6 @@ export default function PaymentTabs({ selected, onSelect, country = 'argentina',
           </a>
         </div>
       </div>
-
-      <div className="mt-4 bg-gray-100 rounded-xl p-4 text-sm text-gray-700 space-y-1">
-        <p>📁 <strong>¿Cómo recibís los cursos?</strong> Una vez confirmado el pago, te enviamos el link de tu carpeta de Google Drive al email que ingresaste.</p>
-        <p>⏳ <strong>Acceso:</strong> tenés <strong>3 meses para descargar</strong> los videos desde la fecha de activación.</p>
-        <p>⏱ <strong>Tiempo de activación:</strong> menos de 24 horas hábiles desde que recibimos el comprobante.</p>
-      </div>
     </div>
   )
 }

@@ -104,7 +104,9 @@ export default function Home() {
     lines.push(`Total: $${total} USD`)
     lines.push(`Método de pago: ${PAYMENT_METHOD_LABELS[paymentMethod]}`)
     lines.push('')
-    lines.push('¿Me podés pasar los datos para pagar? ¡Gracias!')
+    lines.push('¿Me podés pasar los datos para pagar?')
+    lines.push('')
+    lines.push('Una vez que pague, subo el comprobante en la página para activar el acceso. ¡Gracias!')
     return `https://wa.me/5491134030955?text=${encodeURIComponent(lines.join('\n'))}`
   })()
 
@@ -156,8 +158,8 @@ export default function Home() {
   }
 
   const handleSubmit = async () => {
-    if (!customerName.trim() || !customerEmail.trim()) {
-      setError('Por favor completá nombre y email.')
+    if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim()) {
+      setError('Por favor completá nombre, email y WhatsApp.')
       return
     }
     if (!/\S+@\S+\.\S+/.test(customerEmail)) {
@@ -617,7 +619,7 @@ export default function Home() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      WhatsApp (opcional)
+                      WhatsApp <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
