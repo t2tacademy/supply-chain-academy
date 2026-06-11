@@ -373,27 +373,6 @@ export default function Home() {
 
       <StatsSection />
 
-      {/* ─── HOW IT WORKS ─── */}
-      <section className="bg-white border-y border-purple-100 py-14">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-center text-2xl font-bold text-gray-900 mb-10">¿Cómo funciona?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { step: '01', icon: '🎯', title: 'Elegí tu camino', desc: 'Seleccioná una o varias especializaciones y el nivel (Starter, Pro o Expert) que necesitás.' },
-              { step: '02', icon: '💬', title: 'Coordiná el pago', desc: 'Escribinos por WhatsApp para recibir los datos de pago. Aceptamos Mercado Pago, transferencia bancaria y PayPal.' },
-              { step: '03', icon: '📁', title: 'Descargá tus cursos', desc: 'En menos de 24 hs hábiles te enviamos el link de Google Drive. Tenés 3 meses para descargar todos los videos.' },
-            ].map(item => (
-              <div key={item.step} className="bg-white rounded-2xl border border-gray-200 p-6 text-center shadow-sm">
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <div className="text-xs font-bold text-purple-600 mb-2 tracking-widest">PASO {item.step}</div>
-                <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── PARA QUIÉN ─── */}
       <section className="bg-gray-50 border-y border-gray-100 py-14">
         <div className="max-w-4xl mx-auto px-6">
@@ -410,6 +389,27 @@ export default function Home() {
                 <div className="text-3xl mb-3">{p.icon}</div>
                 <h3 className="font-bold text-gray-900 text-sm mb-2">{p.title}</h3>
                 <p className="text-gray-500 text-xs leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── HOW IT WORKS ─── */}
+      <section className="bg-white border-y border-purple-100 py-14">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-center text-2xl font-bold text-gray-900 mb-10">¿Cómo funciona?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { step: '01', icon: '🎯', title: 'Elegí tu camino', desc: 'Seleccioná una o varias especializaciones y el nivel (Starter, Pro o Expert) que necesitás.' },
+              { step: '02', icon: '💬', title: 'Coordiná el pago', desc: 'Escribinos por WhatsApp para recibir los datos de pago. Aceptamos Mercado Pago, transferencia bancaria y PayPal.' },
+              { step: '03', icon: '📁', title: 'Descargá tus cursos', desc: 'En menos de 24 hs hábiles te enviamos el link de Google Drive. Tenés 3 meses para descargar todos los videos.' },
+            ].map(item => (
+              <div key={item.step} className="bg-white rounded-2xl border border-gray-200 p-6 text-center shadow-sm">
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <div className="text-xs font-bold text-purple-600 mb-2 tracking-widest">PASO {item.step}</div>
+                <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -622,23 +622,39 @@ export default function Home() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Completá tu orden</h2>
 
           {/* ── Steps indicator ── */}
-          <div className="flex items-center gap-0 mb-8">
-            {[
-              { n: 1, label: 'Tus datos' },
-              { n: 2, label: 'Medio de pago' },
-              { n: 3, label: 'Comprobante' },
-            ].map((s, i) => (
-              <div key={s.n} className="flex items-center flex-1 last:flex-none">
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold bg-purple-600 text-white">
-                    {s.n}
-                  </div>
-                  <span className="text-xs font-semibold text-purple-700 hidden sm:block">{s.label}</span>
-                </div>
-                {i < 2 && <div className="flex-1 h-px bg-purple-200 mx-2" />}
+          {(() => {
+            const datosOk = customerName.trim() !== '' && customerEmail.trim() !== '' && customerPhone.trim() !== ''
+            const activeStep = receiptFile ? 3 : datosOk ? 2 : 1
+            return (
+              <div className="flex items-center mb-8">
+                {[
+                  { n: 1, label: 'Tus datos' },
+                  { n: 2, label: 'Medio de pago' },
+                  { n: 3, label: 'Comprobante' },
+                ].map((s, i) => {
+                  const done = s.n < activeStep
+                  const current = s.n === activeStep
+                  return (
+                    <div key={s.n} className="flex items-center flex-1 last:flex-none">
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                          done    ? 'bg-purple-600 text-white' :
+                          current ? 'bg-purple-600 text-white ring-4 ring-purple-100' :
+                                    'bg-gray-100 text-gray-400'
+                        }`}>
+                          {done ? '✓' : s.n}
+                        </div>
+                        <span className={`text-xs font-semibold hidden sm:block transition-colors ${
+                          current ? 'text-purple-700' : done ? 'text-purple-500' : 'text-gray-400'
+                        }`}>{s.label}</span>
+                      </div>
+                      {i < 2 && <div className={`flex-1 h-px mx-2 transition-colors ${done ? 'bg-purple-400' : 'bg-gray-200'}`} />}
+                    </div>
+                  )
+                })}
               </div>
-            ))}
-          </div>
+            )
+          })()}
 
           {/* ── Row 1: Datos + Resumen ── */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
