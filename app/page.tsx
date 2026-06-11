@@ -62,7 +62,7 @@ export default function Home() {
     }
   }
 
-  const heroCount59  = useCountUp(59,  400)
+  const heroCount98  = useCountUp(98,  400)
   const heroCount7   = useCountUp(7,   600)
   const heroCount20  = useCountUp(20,  800)
 
@@ -273,7 +273,7 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-10 mb-10">
                 {[
-                  { num: heroCount59,  suffix: '',  label: 'cursos únicos'      },
+                  { num: heroCount98,  suffix: '',  label: 'cursos únicos'      },
                   { num: heroCount7,   suffix: '',  label: 'especializaciones'  },
                   { num: heroCount20,  suffix: '+', label: 'años de experiencia'},
                 ].map(stat => (

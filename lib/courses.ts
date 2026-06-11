@@ -4,9 +4,9 @@ export interface Tier {
   label: string
   courses: number
   minutes: number
-  price: number      // precio con descuento (~50% off)
-  listPrice: number  // precio de lista
-  savings: number    // % de ahorro (entero)
+  price: number
+  listPrice: number
+  savings: number
   driveLink: string
 }
 
@@ -26,39 +26,48 @@ export const CATEGORIES: Category[] = [
     icon: '🔗',
     description: 'Visión estratégica, KPIs, reporting y mindset ganador.',
     tiers: {
-      starter: { label: 'Starter', courses: 10, minutes: 54,  price: 7,  listPrice: 14, savings: 50, driveLink: process.env.DRIVE_SC_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 21, minutes: 145, price: 16, listPrice: 32, savings: 50, driveLink: process.env.DRIVE_SC_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 30, minutes: 238, price: 31, listPrice: 62, savings: 50, driveLink: process.env.DRIVE_SC_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 17, minutes: 330,  price: 20, listPrice: 81,  savings: 75, driveLink: process.env.DRIVE_SC_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 30, minutes: 609,  price: 42, listPrice: 147, savings: 71, driveLink: process.env.DRIVE_SC_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 39, minutes: 807,  price: 55, listPrice: 183, savings: 70, driveLink: process.env.DRIVE_SC_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
         'Aseguramiento de Procesos: Blindá tu Operación',
         'La Materia Gris de tu Equipo: ¿Cuánto Poder Tenés?',
         'Orquesta o Quirófano: ¿Cómo Trabaja tu Organización?',
+        'Trade-Off: La Decisión que Otros no Se Animan a Tomar',
         'Microproyectos I: La Clave para Equipos de Alta Performance',
+        'Reunión ++: El Discurso que Convence a tu Jefe',
+        'Reunión ++: ¿Cómo lo Hacen los Grandes Líderes?',
+        'Reunión ++: 1 Minuto Suficiente — Ser Claro, Conciso y Constructivo',
+        'Reunión ++: La Regla del 5/25 — Foco en la Solución',
         'Capacidad de Procesos: ¿Sabés Qué le Pedís a tu Fábrica?',
+        'Soy de Supply Chain: ¿Cómo Nos Educamos en el Siglo XXI?',
         'Brilliant Start Up: Las 12 Herramientas del Joven Profesional',
         'Liderar es Motivar Ep.1: El Secreto de los que Hacen Mover Equipos',
         'Liderar es Motivar Ep.2: El Arte de Mover Personas',
+        'Reunión ++: Información Correcta — No Gastes Energía de Más',
         'Supply Chain: Las Siglas Clave que Todo Profesional SC Debe Conocer',
         'Proceso de Planeamiento: Las 4 Funciones Básicas de Cada Rol',
       ],
       pro: [
         'Los Pilotos del Hércules: Confianza como Estrategia de SC',
         'Legado Único: El Método para Trascender en tu Área',
+        'Reunión ++: El Mensaje que Hace que Te Sigan',
         '¡Es Posible lo IMPOSIBLE! Cómo Decir SÍ a Pedidos Imposibles en SC',
         'Liderazgo: 10 Ejercicios para Mejorar el Engagement (Ep. II)',
-        'Supply Chain: Los 11 Principios que Crean el Mindset Ganador',
+        'Reunión ++: PowerPoint Limitados — Lo Dijo Elon Musk',
         'Mentoring: La Cortina de la Abuela — Persevera y Convencerás',
         'Productividad: La Charla de Yves Morieux que Cambia Todo',
         'El Consumidor en el Centro: La Lección de Jeff Bezos para SC',
+        'Reunión ++: 4 Tips de Comunicación Asertiva que No Podés Ignorar',
         'Brilliant Start Up Ep.2: Las Siguientes 12 Herramientas Transformadoras',
         'Plan Zero: La Herramienta que Motiva a tu Equipo a la Mejora Continua',
         'Microproyectos II: Empoderá Creativamente a tu Equipo',
       ],
       expert: [
-        'Soy de Supply Chain: ¿Cómo Nos Educamos en el Siglo XXI?',
         'Mi Liderazgo: 12 Habilidades para Destacarte desde el Comienzo',
+        'Supply Chain: Los 11 Principios que Crean el Mindset Ganador',
         'Supply Chain: ¿Cómo Calificarías tu Reporting? 6 Claves para un 10',
         'Reporting de Producto Faltante: Más Inteligencia, Menos Energía',
         'Herramienta ECRS-DA: Simplificá tu Vida y la de tu Equipo',
@@ -75,9 +84,9 @@ export const CATEGORIES: Category[] = [
     icon: '🏭',
     description: 'Gestión de plantas, pérdidas, KPIs y mejora continua.',
     tiers: {
-      starter: { label: 'Starter', courses: 8,  minutes: 88,  price: 16, listPrice: 33, savings: 52, driveLink: process.env.DRIVE_MAN_STARTER || '#' },
-      pro:     { label: 'Pro',     courses: 17, minutes: 154, price: 23, listPrice: 45, savings: 49, driveLink: process.env.DRIVE_MAN_PRO     || '#' },
-      expert:  { label: 'Expert',  courses: 27, minutes: 212, price: 27, listPrice: 54, savings: 50, driveLink: process.env.DRIVE_MAN_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 8,  minutes: 100, price: 10, listPrice: 39,  savings: 74, driveLink: process.env.DRIVE_MAN_STARTER || '#' },
+      pro:     { label: 'Pro',     courses: 18, minutes: 255, price: 22, listPrice: 78,  savings: 72, driveLink: process.env.DRIVE_MAN_PRO     || '#' },
+      expert:  { label: 'Expert',  courses: 27, minutes: 370, price: 32, listPrice: 108, savings: 70, driveLink: process.env.DRIVE_MAN_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
@@ -99,13 +108,13 @@ export const CATEGORIES: Category[] = [
         'Soy Jefe de Producción: ¿Caminás la Planta? ¿Realmente la Ves?',
         'Soy Jefe de Producción Ep.3: Cómo Vivir Más Tranquilo en Operaciones',
         'TPM: El Programa que Me Cambió la Cabeza (y Cambiará la Tuya)',
+        'Plan Zero: La Herramienta que Motiva a tu Equipo a la Mejora Continua',
         'Manufactura: Competir y Jugar para Crecer — Motivación en el Piso',
       ],
       expert: [
         'Manufactura: El Nivel de Conocimiento que tu Equipo Necesita',
         'Herramienta ECRS-DA: Simplificá tu Vida y la de tu Equipo',
         'La Planta No es Flexible: Cómo Remar a Favor de la Corriente',
-        'Plan Zero: La Herramienta que Motiva a tu Equipo a la Mejora Continua',
         'Non Stop Line: La Perspectiva Creativa que Revoluciona Manufactura',
         'Soy Jefe de Producción: Puntos Q — Otro Abordaje de la Calidad',
         'Soy Jefe de Producción: Puntos R — Otro Abordaje de la Seguridad',
@@ -119,23 +128,23 @@ export const CATEGORIES: Category[] = [
     id: 'stocks',
     name: 'Stocks',
     icon: '📦',
-    description: 'Inventarios, safety stock, análisis ABC y herramientas avanzadas.',
+    description: 'Inventarios, safety stock, política de stock y análisis ABC.',
     tiers: {
-      starter: { label: 'Starter', courses: 6,  minutes: 56,  price: 6,  listPrice: 12, savings: 50, driveLink: process.env.DRIVE_STK_STARTER || '#' },
-      pro:     { label: 'Pro',     courses: 9,  minutes: 100, price: 12, listPrice: 24, savings: 50, driveLink: process.env.DRIVE_STK_PRO     || '#' },
-      expert:  { label: 'Expert',  courses: 13, minutes: 270, price: 34, listPrice: 69, savings: 51, driveLink: process.env.DRIVE_STK_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 5,  minutes: 50,  price: 4,  listPrice: 18, savings: 78, driveLink: process.env.DRIVE_STK_STARTER || '#' },
+      pro:     { label: 'Pro',     courses: 9,  minutes: 106, price: 9,  listPrice: 33, savings: 73, driveLink: process.env.DRIVE_STK_PRO     || '#' },
+      expert:  { label: 'Expert',  courses: 13, minutes: 286, price: 26, listPrice: 88, savings: 70, driveLink: process.env.DRIVE_STK_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
         'Aseguramiento de Procesos: Blindá tu Operación',
         'Define tu Target de Stock como un Experto: Sin Adivinar',
-        'Reunión ++: Mi Fórmula para Liberar Tiempo de Equipo',
         'Modelo de Wilson: El Cálculo que Ordena tu Inventario',
         'Distribución Normal: La Herramienta Indispensable del Planificador',
         'Gestión de Inventarios: Ejemplos Simples para Dominar los Conceptos',
       ],
       pro: [
         'Los Pilotos del Hércules: Confianza como Estrategia de SC',
+        'Reunión ++: Mi Fórmula para Liberar Tiempo de Equipo',
         'Stock de Seguridad: Cómo Calcularlo y Mejorarlo sin Teorías',
         'Gestión de Inventarios: 6 Errores Comunes en el Safety Stock',
       ],
@@ -153,25 +162,25 @@ export const CATEGORIES: Category[] = [
     icon: '📊',
     description: 'Sales & Operations Planning, demand planning y sincronía organizacional.',
     tiers: {
-      starter: { label: 'Starter', courses: 5,  minutes: 46,  price: 4,  listPrice: 9,  savings: 56, driveLink: process.env.DRIVE_SOP_STARTER || '#' },
-      pro:     { label: 'Pro',     courses: 7,  minutes: 125, price: 15, listPrice: 30, savings: 50, driveLink: process.env.DRIVE_SOP_PRO     || '#' },
-      expert:  { label: 'Expert',  courses: 11, minutes: 153, price: 19, listPrice: 39, savings: 51, driveLink: process.env.DRIVE_SOP_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 4,  minutes: 28,  price: 3,  listPrice: 12, savings: 75, driveLink: process.env.DRIVE_SOP_STARTER || '#' },
+      pro:     { label: 'Pro',     courses: 6,  minutes: 74,  price: 7,  listPrice: 24, savings: 71, driveLink: process.env.DRIVE_SOP_PRO     || '#' },
+      expert:  { label: 'Expert',  courses: 11, minutes: 135, price: 13, listPrice: 45, savings: 71, driveLink: process.env.DRIVE_SOP_EXPERT  || '#' },
     },
     courseTitles: {
       starter: [
         'Aseguramiento de Procesos: Blindá tu Operación',
         'Reunión ++: 1 Slide Suficiente — Menos es Más',
-        'Proceso S&OP: Los Conceptos Básicos que Todo SC Debe Dominar',
         "Proceso S&OP: Las 7 A's del Demand Planning — Tu Hoja de Ruta",
         'S&OP: Lo que NO Es — Aclaremos el Concepto de Una Vez',
       ],
       pro: [
+        'Proceso S&OP: Los Conceptos Básicos que Todo SC Debe Dominar',
         'Proceso S&OP: ¿Cuál es el Estado de Salud de tu Empresa?',
-        'Proceso S&OP: Falta Producto en Góndola — Caso Real de Sincronía',
       ],
       expert: [
         'Reporting de Producto Faltante: Más Inteligencia, Menos Energía',
         'Proceso S&OP: Forecast Accuracy Losses Tree — Mejora Estructural',
+        'Proceso S&OP: Falta Producto en Góndola — Caso Real de Sincronía',
         'Demand Planning: Generador de Certezas — Salí del Loop Infinito',
         'Planning: Conversando con Ventas — Cómo Reducir el 50% de las Discusiones',
       ],
@@ -183,9 +192,9 @@ export const CATEGORIES: Category[] = [
     icon: '📈',
     description: 'Rol, herramientas, forecast, portfolio y secretos de performance.',
     tiers: {
-      starter: { label: 'Starter', courses: 5,  minutes: 59,  price: 7,  listPrice: 15, savings: 53, driveLink: process.env.DRIVE_DP_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 9,  minutes: 153, price: 23, listPrice: 45, savings: 49, driveLink: process.env.DRIVE_DP_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 17, minutes: 383, price: 51, listPrice: 104, savings: 51, driveLink: process.env.DRIVE_DP_EXPERT  || '#' },
+      starter: { label: 'Starter', courses: 5,  minutes: 56,  price: 5,  listPrice: 21, savings: 76, driveLink: process.env.DRIVE_DP_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 9,  minutes: 140, price: 12, listPrice: 42, savings: 71, driveLink: process.env.DRIVE_DP_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 17, minutes: 366, price: 28, listPrice: 95, savings: 71, driveLink: process.env.DRIVE_DP_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
@@ -219,9 +228,9 @@ export const CATEGORIES: Category[] = [
     icon: '🗓️',
     description: 'MPS, planeamiento estratégico, SKU management y gestión de producto.',
     tiers: {
-      starter: { label: 'Starter', courses: 7,  minutes: 58,  price: 4,  listPrice: 9,  savings: 56, driveLink: process.env.DRIVE_SP_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 9,  minutes: 140, price: 12, listPrice: 24, savings: 50, driveLink: process.env.DRIVE_SP_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 13, minutes: 245, price: 22, listPrice: 45, savings: 51, driveLink: process.env.DRIVE_SP_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 7,  minutes: 90,  price: 6,  listPrice: 24, savings: 75, driveLink: process.env.DRIVE_SP_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 9,  minutes: 147, price: 10, listPrice: 36, savings: 72, driveLink: process.env.DRIVE_SP_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 13, minutes: 204, price: 15, listPrice: 51, savings: 71, driveLink: process.env.DRIVE_SP_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
@@ -251,9 +260,9 @@ export const CATEGORIES: Category[] = [
     icon: '⚙️',
     description: 'Proceso MRP, milk run, relación con proveedores y optimización avanzada.',
     tiers: {
-      starter: { label: 'Starter', courses: 6,  minutes: 67,  price: 9,  listPrice: 18, savings: 50, driveLink: process.env.DRIVE_PM_STARTER  || '#' },
-      pro:     { label: 'Pro',     courses: 10, minutes: 168, price: 21, listPrice: 42, savings: 50, driveLink: process.env.DRIVE_PM_PRO      || '#' },
-      expert:  { label: 'Expert',  courses: 13, minutes: 232, price: 28, listPrice: 57, savings: 51, driveLink: process.env.DRIVE_PM_EXPERT   || '#' },
+      starter: { label: 'Starter', courses: 6,  minutes: 79,  price: 6,  listPrice: 24, savings: 75, driveLink: process.env.DRIVE_PM_STARTER  || '#' },
+      pro:     { label: 'Pro',     courses: 10, minutes: 168, price: 13, listPrice: 45, savings: 71, driveLink: process.env.DRIVE_PM_PRO      || '#' },
+      expert:  { label: 'Expert',  courses: 13, minutes: 223, price: 18, listPrice: 60, savings: 70, driveLink: process.env.DRIVE_PM_EXPERT   || '#' },
     },
     courseTitles: {
       starter: [
@@ -286,23 +295,20 @@ export function minutesToLabel(min: number): string {
   return m > 0 ? `${h}h ${m}min` : `${h}h`
 }
 
-// Bundle prices when buying all 7 categories at the same level (política v9)
-// listPrice = precio de lista antes del ~50% descuento
+// Bundle prices — catálogo completo (todas las categorías al mismo nivel)
 export const BUNDLE_PRICES: Record<TierKey, { price: number; listPrice: number; courses: number; minutes: number }> = {
-  starter: { price: 39,  listPrice: 80,  courses: 20, minutes: 386 },
-  pro:     { price: 90,  listPrice: 179, courses: 40, minutes: 772 },
-  expert:  { price: 149, listPrice: 301, courses: 59, minutes: 1140 },
+  starter: { price: 39,  listPrice: 156, courses: 34, minutes: 543  },
+  pro:     { price: 90,  listPrice: 318, courses: 67, minutes: 1206 },
+  expert:  { price: 149, listPrice: 498, courses: 98, minutes: 1939 },
 }
 
-// Totals for global level cards — uses bundle prices + course/minute counts
 export function getLevelTotals(tier: TierKey) {
   const b = BUNDLE_PRICES[tier]
   return { price: b.price, listPrice: b.listPrice, courses: b.courses, minutes: b.minutes }
 }
 
-// Upgrade pricing (catálogo completo, de un nivel al siguiente)
 export const UPGRADE_PRICES = {
-  'starter-to-pro': { price: 51, from: 'Starter', to: 'Pro',    label: 'Upgrade Starter → Pro'    },
-  'pro-to-expert':  { price: 59, from: 'Pro',     to: 'Expert', label: 'Upgrade Pro → Expert'    },
+  'starter-to-pro': { price: 51, from: 'Starter', to: 'Pro',    label: 'Upgrade Starter → Pro' },
+  'pro-to-expert':  { price: 59, from: 'Pro',     to: 'Expert', label: 'Upgrade Pro → Expert'  },
 } as const
 export type UpgradeKey = keyof typeof UPGRADE_PRICES
