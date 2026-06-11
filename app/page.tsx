@@ -87,6 +87,27 @@ export default function Home() {
 
   const cartActive = upgradeType !== null || itemCount > 0
 
+  const checkoutWhatsappUrl = (() => {
+    const lines: string[] = ['¡Hola Gustavo! Quiero comprar del Catálogo Supply Chain 📚']
+    lines.push('')
+    if (upgradeType) {
+      lines.push(`- ${UPGRADE_PRICES[upgradeType].label} ($${UPGRADE_PRICES[upgradeType].price} USD)`)
+    } else if (bundleTier) {
+      lines.push(`- Catálogo Completo ${bundleTier === 'starter' ? 'Starter' : bundleTier === 'pro' ? 'Pro' : 'Expert'} ($${BUNDLE_PRICES[bundleTier].price} USD)`)
+    } else {
+      selectedEntries.forEach(([catId, tier]) => {
+        const cat = CATEGORIES.find(c => c.id === catId)
+        if (cat) lines.push(`- ${cat.name} ${cat.tiers[tier].label} ($${cat.tiers[tier].price} USD)`)
+      })
+    }
+    lines.push('')
+    lines.push(`Total: $${total} USD`)
+    lines.push(`Método de pago: ${PAYMENT_METHOD_LABELS[paymentMethod]}`)
+    lines.push('')
+    lines.push('¿Me podés pasar los datos para pagar? ¡Gracias!')
+    return `https://wa.me/5491134030955?text=${encodeURIComponent(lines.join('\n'))}`
+  })()
+
   const handleSelect = (categoryId: string, tier: TierKey | null) => {
     setUpgradeType(null)
     setUpgradeVerified(false)
@@ -694,8 +715,8 @@ export default function Home() {
           {/* ── Row 2: Medio de pago (full width) ── */}
           <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-6">
             <h3 className="font-bold text-gray-900 mb-1">Medio de pago</h3>
-            <p className="text-xs text-gray-400 mb-4">Completá la transferencia antes de confirmar la orden.</p>
-            <PaymentTabs selected={paymentMethod} onSelect={setPaymentMethod} country={country} />
+            <p className="text-xs text-gray-400 mb-4">Elegí tu método y escribinos por WhatsApp para recibir los datos de transferencia.</p>
+            <PaymentTabs selected={paymentMethod} onSelect={setPaymentMethod} country={country} whatsappUrl={checkoutWhatsappUrl} />
           </div>
 
           {/* ── Row 3: Comprobante + Submit ── */}
