@@ -380,7 +380,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { step: '01', icon: '🎯', title: 'Elegí tu camino', desc: 'Seleccioná una o varias especializaciones y el nivel (Starter, Pro o Expert) que necesitás.' },
-              { step: '02', icon: '💳', title: 'Realizá el pago', desc: 'Transferí por CBU, Mercado Pago, PayPal o transferencia internacional al importe total.' },
+              { step: '02', icon: '💬', title: 'Coordiná el pago', desc: 'Escribinos por WhatsApp para recibir los datos de pago. Aceptamos Mercado Pago, transferencia bancaria y PayPal.' },
               { step: '03', icon: '📁', title: 'Descargá tus cursos', desc: 'En menos de 24 hs hábiles te enviamos el link de Google Drive. Tenés 3 meses para descargar todos los videos.' },
             ].map(item => (
               <div key={item.step} className="bg-white rounded-2xl border border-gray-200 p-6 text-center shadow-sm">
@@ -388,6 +388,28 @@ export default function Home() {
                 <div className="text-xs font-bold text-purple-600 mb-2 tracking-widest">PASO {item.step}</div>
                 <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── PARA QUIÉN ─── */}
+      <section className="bg-gray-50 border-y border-gray-100 py-14">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-center text-2xl font-bold text-gray-900 mb-2">¿Para quién es este catálogo?</h2>
+          <p className="text-center text-gray-500 text-sm mb-10">Si te identificás con alguno de estos perfiles, este catálogo es para vos.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: '🎓', title: 'Estudiante universitario', desc: 'Querés entrar al mundo Supply Chain con una ventaja real sobre el resto de los egresados.' },
+              { icon: '🔄', title: 'Profesional en transición', desc: 'Venís de otra área y necesitás formación práctica y rápida para arrancar en tu nuevo rol.' },
+              { icon: '📈', title: 'Analista que quiere crecer', desc: 'Ya estás en el rubro pero querés profundizar, especializarte y dar el siguiente paso.' },
+              { icon: '🏭', title: 'Líder de operaciones', desc: 'Necesitás actualizar a tu equipo o reforzar conceptos clave con contenido aplicado a la realidad.' },
+            ].map(p => (
+              <div key={p.title} className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm hover:shadow-md hover:border-purple-200 transition-all">
+                <div className="text-3xl mb-3">{p.icon}</div>
+                <h3 className="font-bold text-gray-900 text-sm mb-2">{p.title}</h3>
+                <p className="text-gray-500 text-xs leading-relaxed">{p.desc}</p>
               </div>
             ))}
           </div>
@@ -597,7 +619,26 @@ export default function Home() {
               ← Volver al catálogo
             </button>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Completá tu orden</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Completá tu orden</h2>
+
+          {/* ── Steps indicator ── */}
+          <div className="flex items-center gap-0 mb-8">
+            {[
+              { n: 1, label: 'Tus datos' },
+              { n: 2, label: 'Medio de pago' },
+              { n: 3, label: 'Comprobante' },
+            ].map((s, i) => (
+              <div key={s.n} className="flex items-center flex-1 last:flex-none">
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold bg-purple-600 text-white">
+                    {s.n}
+                  </div>
+                  <span className="text-xs font-semibold text-purple-700 hidden sm:block">{s.label}</span>
+                </div>
+                {i < 2 && <div className="flex-1 h-px bg-purple-200 mx-2" />}
+              </div>
+            ))}
+          </div>
 
           {/* ── Row 1: Datos + Resumen ── */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
