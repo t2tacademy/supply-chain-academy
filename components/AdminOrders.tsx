@@ -50,6 +50,8 @@ function exportCSV(orders: Order[]) {
 export default function AdminOrders({ orders }: { orders: Order[] }) {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved'>('all')
+  const [resendingId, setResendingId] = useState<string | null>(null)
+  const [resendDoneId, setResendDoneId] = useState<string | null>(null)
 
   const filtered = useMemo(() => {
     return orders.filter(o => {
@@ -133,6 +135,20 @@ export default function AdminOrders({ orders }: { orders: Order[] }) {
             const statusInfo = STATUS_LABELS[order.status] ?? STATUS_LABELS['pending']
             const approveUrl = `/api/approve/${order.approve_token}`
 
+            const resendUrl = `/api/resend-access/${order.approve_token}`
+            const rejectUrl = `/api/reject/${order.approve_token}`
+            const isDoneResend = resendDoneId === order.id
+            const isResending = resendingId === order.id
+
+            async function handleResend() {
+              if (isResending || isDoneResend) return
+              setResendingId(order.id)
+              await fetch(resendUrl, { method: 'POST' })
+              setResendingId(null)
+              setResendDoneId(order.id)
+              setTimeout(() => setResendDoneId(null), 4000)
+            }
+
             return (
               <div key={order.id} className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
                 {/* Header */}
@@ -176,14 +192,40 @@ export default function AdminOrders({ orders }: { orders: Order[] }) {
                       <span className="text-green-600">✓ Aprobado {formatDate(order.approved_at)}</span>
                     )}
                   </div>
-                  {order.status === 'pending' && (
-                    <a
-                      href={approveUrl}
-                      className="bg-green-600 hover:bg-green-500 text-white font-bold px-5 py-2 rounded-lg text-sm transition-colors"
-                    >
-                      ✅ Confirmar pago y enviar acceso
-                    </a>
-                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {order.status === 'pending' && (
+                      <>
+                        <a
+                          href={approveUrl}
+                          className="bg-green-600 hover:bg-green-500 text-white font-bold px-5 py-2 rounded-lg text-sm transition-colors"
+                        >
+                          ✅ Confirmar pago
+                        </a>
+                        <a
+                          href={rejectUrl}
+                          onClick={e => {
+                            if (!confirm(`¿Rechazar la orden de ${order.customer_name}?`)) e.preventDefault()
+                          }}
+                          className="bg-red-100 hover:bg-red-200 text-red-700 font-bold px-5 py-2 rounded-lg text-sm transition-colors"
+                        >
+                          ❌ Rechazar
+                        </a>
+                      </>
+                    )}
+                    {order.status === 'approved' && (
+                      <button
+                        onClick={handleResend}
+                        disabled={isResending || isDoneResend}
+                        className={`font-bold px-5 py-2 rounded-lg text-sm transition-colors ${
+                          isDoneResend
+                            ? 'bg-green-100 text-green-700 cursor-default'
+                            : 'bg-blue-100 hover:bg-blue-200 text-blue-700 disabled:opacity-50'
+                        }`}
+                      >
+                        {isDoneResend ? '✓ Email reenviado' : isResending ? 'Enviando...' : '📧 Reenviar acceso'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             )
