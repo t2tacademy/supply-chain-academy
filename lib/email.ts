@@ -108,7 +108,7 @@ export async function sendCustomerAccess(order: {
 
           <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-top:20px">
             <p style="margin:0;color:#1e40af;font-size:14px">
-              💡 <strong>Acceso permanente:</strong> Los links son tuyos para siempre. Podés acceder desde cualquier dispositivo con tu cuenta de Google.
+              💡 <strong>Acceso por 90 días:</strong> Tu acceso a las carpetas de Drive está activo por 90 días desde hoy. Podés acceder desde cualquier dispositivo con tu cuenta de Google.
             </p>
           </div>
 
