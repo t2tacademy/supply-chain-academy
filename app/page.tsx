@@ -292,7 +292,7 @@ export default function Home() {
             <div className="shrink-0 w-full md:w-[480px]">
               {/* No overflow-hidden on outer so the circle can overlap banner→content */}
               <a
-                href="https://www.linkedin.com/in/gustavorodriguezsc/"
+                href="https://www.linkedin.com/in/gustavorodriguez-/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block rounded-3xl border border-white/10 hover:border-blue-400/40 transition-all group shadow-2xl shadow-black/60 hover:shadow-blue-900/40"
