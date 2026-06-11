@@ -41,6 +41,9 @@ export interface Order {
   status: 'pending' | 'approved' | 'rejected'
   approve_token: string
   comprobante_url?: string | null
+  drive_permission_ids?: Record<string, string> | null
+  drive_access_revoked?: boolean
+  drive_access_revoked_at?: string | null
   created_at: string
   approved_at?: string
 }

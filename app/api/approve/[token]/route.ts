@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { sendCustomerAccess } from '@/lib/email'
+import { grantOrderAccess } from '@/lib/drive'
 
 export async function GET(
   _req: Request,
@@ -24,9 +25,16 @@ export async function GET(
     })
   }
 
+  const drivePermissionIds = await grantOrderAccess(order.selections, order.customer_email)
+
   const { error: updateError } = await supabase
     .from('orders')
-    .update({ status: 'approved', approved_at: new Date().toISOString() })
+    .update({
+      status: 'approved',
+      approved_at: new Date().toISOString(),
+      drive_permission_ids: drivePermissionIds,
+      drive_access_revoked: false,
+    })
     .eq('id', order.id)
 
   if (updateError) {
