@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { CATEGORIES, TierKey, getLevelTotals, minutesToLabel, BUNDLE_PRICES, UPGRADE_PRICES, UpgradeKey } from '@/lib/courses'
 import CategoryCompareTable from '@/components/CategoryCompareTable'
@@ -8,7 +9,7 @@ import PaymentTabs, { PaymentMethod } from '@/components/PaymentTabs'
 import StatsSection from '@/components/StatsSection'
 
 type Selections = Record<string, TierKey>
-type FormState = 'catalog' | 'verify-upgrade' | 'checkout' | 'success'
+type FormState = 'catalog' | 'verify-upgrade' | 'checkout'
 
 const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   mercadopago:  'Mercado Pago',
@@ -36,6 +37,7 @@ function useCountUp(target: number, delayMs: number = 0) {
 }
 
 export default function Home() {
+  const router = useRouter()
   const [selections, setSelections] = useState<Selections>({})
   const [upgradeType, setUpgradeType] = useState<UpgradeKey | null>(null)
   const [upgradeVerified, setUpgradeVerified] = useState(false)
@@ -188,7 +190,7 @@ export default function Home() {
         }),
       })
       if (!res.ok) throw new Error()
-      setFormState('success')
+      router.push('/gracias')
     } catch {
       setError('Hubo un error al enviar tu orden. Por favor intentá de nuevo.')
     } finally {
@@ -370,8 +372,7 @@ export default function Home() {
       </section>
 
       {/* ─── CATALOG ─── */}
-      {formState !== 'success' && (
-        <section id="catalogo" className="max-w-4xl mx-auto px-6 py-16">
+      <section id="catalogo" className="max-w-4xl mx-auto px-6 py-16">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-3">Especializaciones disponibles</h2>
             <p className="text-gray-500 max-w-xl mx-auto text-sm">
@@ -502,7 +503,6 @@ export default function Home() {
             ~50% de descuento vs precio de lista. Pro incluye todos los cursos Starter + los propios. Expert incluye todos los niveles. Acceso por 3 meses para descargar desde Google Drive.
           </div>
         </section>
-      )}
 
       {/* ─── VERIFY UPGRADE ─── */}
       {formState === 'verify-upgrade' && upgradeType && (
@@ -757,24 +757,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* ─── SUCCESS ─── */}
-      {formState === 'success' && (
-        <section className="max-w-lg mx-auto px-6 py-24 text-center animate-fade-in">
-          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-10">
-            <div className="text-5xl mb-4">🎉</div>
-            <h2 className="text-2xl font-extrabold text-gray-900 mb-3">¡Orden registrada!</h2>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Tu orden fue enviada con éxito. Una vez que confirmemos tu pago (<strong>menos de 24 hs hábiles</strong>), te enviamos los links de acceso a <strong>{customerEmail}</strong>.
-            </p>
-            <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-purple-800 text-left space-y-1">
-              <p>📁 Recibirás un email con el link de tu carpeta de Google Drive.</p>
-              <p>⏳ Tenés <strong>3 meses para descargar</strong> los videos desde la activación.</p>
-              <p>💬 ¿Dudas? Escribinos a <strong>t2tscacademy@gmail.com</strong></p>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* ─── FLOATING CART BAR ─── */}
       {cartActive && formState === 'catalog' && (
         <div className="fixed bottom-0 left-0 right-0 z-50 animate-fade-in">
@@ -829,21 +811,19 @@ export default function Home() {
       {cartActive && formState === 'catalog' && <div className="h-24" />}
 
       {/* ─── WHATSAPP FLOTANTE ─── */}
-      {formState !== 'success' && (
-        <a
-          href={`https://wa.me/5491134030955?text=${encodeURIComponent('¡Hola Gustavo! 👋 Estuve viendo el Catálogo Supply Chain y me parece una oportunidad increíble. Me gustaría saber más sobre los módulos y cómo empezar. ¡Muchas gracias!')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`fixed z-50 flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold shadow-lg hover:shadow-xl transition-all rounded-full group ${cartActive && formState === 'catalog' ? 'bottom-24 right-4 sm:right-6' : 'bottom-6 right-4 sm:right-6'}`}
-          style={{ padding: '12px 20px 12px 14px' }}
-        >
-          <svg className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.549 4.107 1.51 5.836L0 24l6.335-1.484A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.371l-.36-.214-3.722.872.938-3.63-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
-          </svg>
-          <span className="text-sm hidden sm:block">Consultar por WhatsApp</span>
-        </a>
-      )}
+      <a
+        href={`https://wa.me/5491134030955?text=${encodeURIComponent('¡Hola Gustavo! 👋 Estuve viendo el Catálogo Supply Chain y me parece una oportunidad increíble. Me gustaría saber más sobre los módulos y cómo empezar. ¡Muchas gracias!')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`fixed z-50 flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold shadow-lg hover:shadow-xl transition-all rounded-full group ${cartActive && formState === 'catalog' ? 'bottom-24 right-4 sm:right-6' : 'bottom-6 right-4 sm:right-6'}`}
+        style={{ padding: '12px 20px 12px 14px' }}
+      >
+        <svg className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.549 4.107 1.51 5.836L0 24l6.335-1.484A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.007-1.371l-.36-.214-3.722.872.938-3.63-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/>
+        </svg>
+        <span className="text-sm hidden sm:block">Consultar por WhatsApp</span>
+      </a>
 
       {/* ─── FOOTER ─── */}
       <footer className="bg-[#0A0A0F] text-gray-500 text-center py-8 text-sm border-t border-gray-800">
