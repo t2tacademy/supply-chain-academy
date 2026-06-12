@@ -229,7 +229,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center gap-4">
           {/* Logo T2T — link a la plataforma */}
           <a
-            href="https://t2tacademy.sabionet.com/"
+            href="https://gustavorodriguez.ar/"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2.5 group shrink-0"
@@ -242,7 +242,7 @@ export default function Home() {
 
           {/* Promo Habilidades Blandas */}
           <a
-            href="https://t2tacademy.sabionet.com/"
+            href="https://gustavorodriguez.ar/"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 bg-purple-900/50 hover:bg-purple-800/60 border border-purple-700/40 text-purple-200 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-full transition-colors whitespace-nowrap"
