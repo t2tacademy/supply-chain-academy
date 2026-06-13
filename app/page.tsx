@@ -62,7 +62,7 @@ export default function Home() {
     }
   }
 
-  const heroCount98  = useCountUp(98,  400)
+  const heroCount98  = useCountUp(97,  400)
   const heroCount7   = useCountUp(7,   600)
   const heroCount20  = useCountUp(20,  800)
 
