@@ -296,9 +296,9 @@ export function minutesToLabel(min: number): string {
 
 // Bundle prices — catálogo completo (todas las categorías al mismo nivel)
 export const BUNDLE_PRICES: Record<TierKey, { price: number; listPrice: number; courses: number; minutes: number }> = {
-  starter: { price: 39,  listPrice: 156, courses: 35, minutes: 574  },
-  pro:     { price: 90,  listPrice: 318, courses: 68, minutes: 1222 },
-  expert:  { price: 149, listPrice: 498, courses: 97, minutes: 1934 },
+  starter: { price: 39,  listPrice: 156, courses: 34, minutes: 546  },
+  pro:     { price: 90,  listPrice: 318, courses: 67, minutes: 1206 },
+  expert:  { price: 149, listPrice: 498, courses: 98, minutes: 1938 },
 }
 
 export function getLevelTotals(tier: TierKey) {
