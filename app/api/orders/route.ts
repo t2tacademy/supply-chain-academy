@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import type { OrderSelection } from '@/lib/supabase'
 import { sendAdminNotification } from '@/lib/email'
-import { CATEGORIES, BUNDLE_PRICES, UPGRADE_PRICES, TierKey, UpgradeKey } from '@/lib/courses'
+import { TierKey, UpgradeKey } from '@/lib/courses'
+import { getServerCatalog } from '@/lib/catalog/server'
 import { findQualifyingOrder } from '@/lib/upgrades'
 
 const PAYMENT_METHODS = ['mercadopago', 'transferencia', 'bbva-usd', 'paypal']
@@ -41,12 +42,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
     }
 
-    // Los precios se calculan acá desde lib/courses.ts — nunca se confía en lo que manda el navegador
+    // Los precios se calculan acá con el catálogo publicado — nunca se confía en lo que manda el navegador
+    const { categories: CATEGORIES, bundles: BUNDLE_PRICES, upgrades: UPGRADE_PRICES } = await getServerCatalog()
     let enrichedSelections: OrderSelection[]
     let totalUsd: number
 
     if (upgradeType) {
-      const upg = UPGRADE_PRICES[upgradeType as UpgradeKey]
+      const upg = Object.hasOwn(UPGRADE_PRICES, upgradeType) ? UPGRADE_PRICES[upgradeType as UpgradeKey] : undefined
       if (!upg) {
         return NextResponse.json({ error: 'Upgrade inválido' }, { status: 400 })
       }

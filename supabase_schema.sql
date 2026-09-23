@@ -31,3 +31,15 @@ ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 
 -- Comprobantes: bucket PRIVADO. La app genera links firmados desde /admin/comprobante/[id].
 -- Storage > comprobantes > Edit bucket > destildar "Public bucket"
+
+-- ── Catálogo editable desde /admin/catalogo ──
+-- Cada "Publicar" guarda una versión completa; la web usa la última. Permite volver atrás.
+CREATE TABLE IF NOT EXISTS catalog_versions (
+  id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  data       JSONB NOT NULL,
+  note       TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Igual que orders: RLS activado sin políticas → solo la service_role (servidor) puede leer/escribir
+ALTER TABLE catalog_versions ENABLE ROW LEVEL SECURITY;

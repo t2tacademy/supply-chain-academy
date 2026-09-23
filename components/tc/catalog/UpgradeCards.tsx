@@ -1,6 +1,7 @@
 'use client'
 
-import { UPGRADE_PRICES, UpgradeKey } from '@/lib/courses'
+import { UpgradeKey } from '@/lib/courses'
+import { useCatalog } from '@/components/CatalogProvider'
 import { flyToRemito } from './fly'
 
 const UPGRADE_CODES: Record<UpgradeKey, string> = {
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export default function UpgradeCards({ activeUpgrade, onPick }: Props) {
+  const { upgrades: UPGRADE_PRICES } = useCatalog()
   const keys = Object.keys(UPGRADE_PRICES) as UpgradeKey[]
 
   return (

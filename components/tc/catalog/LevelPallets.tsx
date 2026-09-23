@@ -1,6 +1,7 @@
 'use client'
 
-import { getLevelTotals, minutesToLabel, TierKey } from '@/lib/courses'
+import { minutesToLabel, TierKey } from '@/lib/courses'
+import { useCatalog } from '@/components/CatalogProvider'
 import { TIER_TRI, TIER_SHORT } from './codes'
 import { flyToRemito } from './fly'
 
@@ -36,6 +37,8 @@ function dropLayers(tierCode: string) {
 }
 
 export default function LevelPallets({ activeTier, onPick }: Props) {
+  const { bundles } = useCatalog()
+  const getLevelTotals = (tier: TierKey) => bundles[tier]
   return (
     <div className="grid gap-3.5" style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,230px),1fr))' }}>
       {TIERS.map(tier => {

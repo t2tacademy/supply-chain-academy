@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { CATEGORIES, TierKey, minutesToLabel } from '@/lib/courses'
+import { TierKey, minutesToLabel } from '@/lib/courses'
+import { useCatalog } from '@/components/CatalogProvider'
 import { SPEC_CODES, TIER_TRI } from '@/components/tc/catalog/codes'
 import { flyToRemito } from '@/components/tc/catalog/fly'
 
@@ -38,6 +39,7 @@ function rank(tier: TierKey): number {
 }
 
 export default function CategoryCompareTable({ selections, onSelect }: Props) {
+  const { categories: CATEGORIES } = useCatalog()
   const [activeCatId, setActiveCatId] = useState(CATEGORIES[0].id)
   const cat = CATEGORIES.find(c => c.id === activeCatId)!
   const code = SPEC_CODES[cat.id] ?? cat.id
