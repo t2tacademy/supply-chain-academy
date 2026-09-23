@@ -6,10 +6,18 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY || 'placeholder')
 }
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@t2tacademy.com'
+// Resend no tira excepción cuando rechaza un envío: devuelve { error }. Se registra en los logs de Vercel.
+async function send(payload: Parameters<Resend['emails']['send']>[0]) {
+  const { error } = await getResend().emails.send(payload)
+  if (error) console.error('Resend error:', error.name, error.message, '→', payload.to)
+}
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 't2tscacademy@gmail.com'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 // Con onboarding@resend.dev Resend solo entrega al dueño de la cuenta — configurar EMAIL_FROM con un dominio verificado
 const EMAIL_FROM = process.env.EMAIL_FROM || 'T2T Academy <onboarding@resend.dev>'
+// Las respuestas de los clientes ("Respondé este email") van a este buzón
+const EMAIL_REPLY_TO = process.env.EMAIL_REPLY_TO || 't2tscacademy@gmail.com'
 
 export async function sendAdminNotification(order: {
   id: string
@@ -28,7 +36,7 @@ export async function sendAdminNotification(order: {
 
   const approveUrl = `${BASE_URL}/api/approve/${order.approveToken}`
 
-  await getResend().emails.send({
+  await send({
     from: EMAIL_FROM,
     to: ADMIN_EMAIL,
     subject: `🛒 Nueva compra: ${order.customerName.replace(/\s+/g, ' ').slice(0, 80)} — $${order.totalUsd.toFixed(2)} USD`,
@@ -93,9 +101,10 @@ export async function sendCustomerAccess(order: {
     `)
     .join('')
 
-  await getResend().emails.send({
+  await send({
     from: EMAIL_FROM,
     to: order.customerEmail,
+    replyTo: EMAIL_REPLY_TO,
     subject: '🎉 ¡Tu acceso a los cursos de Supply Chain está listo!',
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
