@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import type { Order, OrderSelection } from '@/lib/supabase'
+import { formatOrderNumber } from '@/lib/orderNumber'
 
 const STATUS_LABELS: Record<string, { text: string; cls: string }> = {
   pending:  { text: 'Pendiente', cls: 'bg-yellow-100 text-yellow-800' },
@@ -154,6 +155,7 @@ export default function AdminOrders({ orders }: { orders: Order[] }) {
                 {/* Header */}
                 <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-gray-100">
                   <div>
+                    <p className="font-mono text-xs text-gray-400">{formatOrderNumber(order.id)}</p>
                     <p className="font-bold text-gray-900">{order.customer_name}</p>
                     <p className="text-sm text-gray-400">{order.customer_email}</p>
                     {order.customer_phone && <p className="text-sm text-gray-400">{order.customer_phone}</p>}

@@ -215,7 +215,8 @@ export default function CatalogPage() {
         setError(res.status === 400 && data?.error ? data.error : 'Hubo un error al enviar tu orden. Por favor intentá de nuevo.')
         return
       }
-      router.push('/gracias')
+      const data = await res.json().catch(() => null)
+      router.push(data?.orderNumber ? `/gracias?orden=${encodeURIComponent(data.orderNumber)}` : '/gracias')
     } catch {
       setError('Hubo un error al enviar tu orden. Por favor intentá de nuevo.')
     } finally {

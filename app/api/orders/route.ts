@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import type { OrderSelection } from '@/lib/supabase'
-import { sendAdminNotification } from '@/lib/email'
+import { sendAdminNotification, sendCustomerReceipt } from '@/lib/email'
+import { formatOrderNumber } from '@/lib/orderNumber'
 import { TierKey, UpgradeKey } from '@/lib/courses'
 import { getServerCatalog } from '@/lib/catalog/server'
 import { findQualifyingOrder } from '@/lib/upgrades'
@@ -132,19 +133,25 @@ export async function POST(req: Request) {
 
     if (error) throw error
 
-    await sendAdminNotification({
+    const mail = {
       id: data.id,
+      orderNumber: formatOrderNumber(data.id),
+      createdAt: new Date(data.created_at ?? Date.now()),
       customerName,
       customerEmail,
       customerPhone,
       selections: enrichedSelections,
       totalUsd,
       paymentMethod,
-      approveToken: data.approve_token,
-      comprobanteUrl: comprobante_url,
-    })
+      hasReceipt: !!comprobante_url,
+    }
+    // La orden ya está guardada: si falla un mail se registra y no se corta la compra
+    await Promise.allSettled([
+      sendAdminNotification({ ...mail, approveToken: data.approve_token }),
+      sendCustomerReceipt(mail),
+    ]).then(rs => rs.forEach(r => r.status === 'rejected' && console.error('Error enviando mail de orden:', r.reason)))
 
-    return NextResponse.json({ success: true, orderId: data.id })
+    return NextResponse.json({ success: true, orderId: data.id, orderNumber: mail.orderNumber })
   } catch (err) {
     console.error('Error creating order:', err)
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })

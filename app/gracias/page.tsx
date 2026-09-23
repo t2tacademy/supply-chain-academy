@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ORDER_NUMBER_RE } from '@/lib/orderNumber'
 
 export const metadata = {
   title: '¡Pedido recibido! — T2T Academy',
@@ -12,7 +13,10 @@ const STEPS = [
   { code: '04', text: '¡Empezás a aprender!' },
 ]
 
-export default function GraciasPage() {
+export default async function GraciasPage({ searchParams }: { searchParams: Promise<{ orden?: string | string[] }> }) {
+  const { orden } = await searchParams
+  const orderNumber = typeof orden === 'string' && ORDER_NUMBER_RE.test(orden) ? orden : null
+
   return (
     <div
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-5 py-16"
@@ -37,7 +41,7 @@ export default function GraciasPage() {
         <div className="p-8 sm:p-10">
           <div className="mb-6 flex items-center justify-between font-mono text-[11px] font-medium tracking-[.14em] text-tc-text-2">
             <span className="text-tc-green">● DESPACHO CONFIRMADO</span>
-            <span>ORDEN REGISTRADA</span>
+            <span>{orderNumber ? `ORDEN ${orderNumber}` : 'ORDEN REGISTRADA'}</span>
           </div>
 
           <h1
@@ -51,6 +55,12 @@ export default function GraciasPage() {
             <strong className="text-tc-text">menos de 24 hs hábiles</strong> te enviamos el acceso a tus cursos por
             email.
           </p>
+          {orderNumber && (
+            <p className="m-0 -mt-4 mb-8 text-sm leading-[1.6] text-tc-text-2">
+              Tu número de orden es <strong className="font-mono text-tc-text">{orderNumber}</strong>. Te enviamos un correo con el
+              detalle de la operación; revisá también la carpeta de spam.
+            </p>
+          )}
 
           <div className="mb-8 flex flex-col gap-2.5">
             {STEPS.map((step) => (
