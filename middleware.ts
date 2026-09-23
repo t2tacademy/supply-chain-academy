@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
     const expectedUser = process.env.ADMIN_USER
     const expectedPass = process.env.ADMIN_PASS
 
-    if (expectedUser && expectedPass && user === expectedUser && pass === expectedPass) {
+    if (expectedUser && expectedPass && safeEqual(user, expectedUser) && safeEqual(pass, expectedPass)) {
       return NextResponse.next()
     }
   }
@@ -24,6 +24,15 @@ export function middleware(request: NextRequest) {
       'WWW-Authenticate': 'Basic realm="T2T Admin"',
     },
   })
+}
+
+// Comparación en tiempo constante para no filtrar la contraseña por timing
+function safeEqual(a: string, b: string) {
+  let diff = a.length ^ b.length
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0)
+  }
+  return diff === 0
 }
 
 export const config = {

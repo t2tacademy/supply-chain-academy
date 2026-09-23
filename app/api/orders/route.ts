@@ -5,13 +5,37 @@ import { sendAdminNotification } from '@/lib/email'
 import { CATEGORIES, BUNDLE_PRICES, UPGRADE_PRICES, TierKey, UpgradeKey } from '@/lib/courses'
 import { findQualifyingOrder } from '@/lib/upgrades'
 
+const PAYMENT_METHODS = ['mercadopago', 'transferencia', 'bbva-usd', 'paypal']
+const RECEIPT_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif', 'application/pdf']
+// Vercel corta los requests en ~4.5 MB y el base64 agrega ~33%
+const MAX_RECEIPT_BYTES = 3 * 1024 * 1024
+
+const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
+
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { customerName, customerEmail, customerPhone, selections, paymentMethod, upgradeType, receiptBase64, receiptContentType, receiptFileName } = body
+    const { selections, upgradeType, receiptBase64, receiptContentType } = body
 
-    if (!customerName || !customerEmail) {
+    const customerName = str(body.customerName, 120)
+    const customerEmail = str(body.customerEmail, 200).toLowerCase()
+    const customerPhone = str(body.customerPhone, 40)
+    const paymentMethod = str(body.paymentMethod, 40)
+
+    if (!customerName || !customerEmail || !customerPhone) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
+      return NextResponse.json({ error: 'Email inválido' }, { status: 400 })
+    }
+    if (!PAYMENT_METHODS.includes(paymentMethod)) {
+      return NextResponse.json({ error: 'Medio de pago inválido' }, { status: 400 })
+    }
+    if (typeof receiptBase64 !== 'string' || !RECEIPT_TYPES.includes(receiptContentType)) {
+      return NextResponse.json({ error: 'Adjuntá el comprobante en JPG, PNG, WEBP, HEIC o PDF' }, { status: 400 })
+    }
+    if (Buffer.byteLength(receiptBase64, 'base64') > MAX_RECEIPT_BYTES) {
+      return NextResponse.json({ error: 'El comprobante supera los 3 MB' }, { status: 400 })
     }
     if (!upgradeType && (!Array.isArray(selections) || selections.length === 0)) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
@@ -76,7 +100,7 @@ export async function POST(req: Request) {
     if (receiptBase64 && receiptContentType) {
       try {
         const buffer = Buffer.from(receiptBase64, 'base64')
-        const ext = (receiptFileName?.split('.').pop() || 'jpg').replace(/[^a-zA-Z0-9]/g, '').slice(0, 5) || 'jpg'
+        const ext = receiptContentType === 'application/pdf' ? 'pdf' : receiptContentType.split('/')[1].replace('jpeg', 'jpg')
         const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
         const { error: uploadError } = await supabase.storage
           .from('comprobantes')

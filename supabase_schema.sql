@@ -19,5 +19,15 @@ CREATE INDEX IF NOT EXISTS orders_approve_token_idx ON orders (approve_token);
 CREATE INDEX IF NOT EXISTS orders_created_at_idx    ON orders (created_at DESC);
 CREATE INDEX IF NOT EXISTS orders_status_idx        ON orders (status);
 
--- Deshabilitar Row Level Security para acceso desde service_role
-ALTER TABLE orders DISABLE ROW LEVEL SECURITY;
+-- Columnas agregadas después de la versión inicial
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS comprobante_url         TEXT;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS drive_permission_ids    JSONB;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS drive_access_revoked    BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS drive_access_revoked_at TIMESTAMPTZ;
+
+-- RLS activado y SIN políticas: nadie puede leer/escribir con la clave pública (anon).
+-- La app usa solo la service_role desde el servidor, que ignora RLS.
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+-- Comprobantes: bucket PRIVADO. La app genera links firmados desde /admin/comprobante/[id].
+-- Storage > comprobantes > Edit bucket > destildar "Public bucket"

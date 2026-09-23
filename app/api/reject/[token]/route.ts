@@ -1,27 +1,43 @@
-import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { escapeHtml } from '@/lib/html'
+import { adminPage, htmlResponse } from '@/lib/adminPage'
 
-export async function GET(
-  _req: Request,
-  { params }: { params: Promise<{ token: string }> }
-) {
-  const { token } = await params
+type Params = { params: Promise<{ token: string }> }
 
+async function findOrder(token: string) {
   const { data: order, error } = await supabase
     .from('orders')
     .select('*')
     .eq('approve_token', token)
     .single()
+  return error ? null : order
+}
 
-  if (error || !order) {
-    return new NextResponse('Orden no encontrada', { status: 404 })
-  }
+const notFound = () => htmlResponse(adminPage({ title: 'Orden no encontrada', heading: 'Orden no encontrada', body: '', accent: '#dc2626' }), 404)
+const already = (name: string) => htmlResponse(adminPage({
+  title: 'Orden rechazada', heading: 'Ya estaba rechazada', accent: '#dc2626',
+  body: `<p>Esta orden de <strong>${escapeHtml(name)}</strong> ya fue rechazada anteriormente.</p>`,
+}))
 
-  if (order.status === 'rejected') {
-    return new NextResponse(resultHtml(order.customer_name, 'already'), {
-      headers: { 'Content-Type': 'text/html' },
-    })
-  }
+// GET solo confirma; el rechazo real se hace con el POST del botón (ver approve)
+export async function GET(_req: Request, { params }: Params) {
+  const { token } = await params
+  const order = await findOrder(token)
+  if (!order) return notFound()
+  if (order.status === 'rejected') return already(order.customer_name)
+
+  return htmlResponse(adminPage({
+    title: 'Rechazar orden', heading: '¿Rechazar esta orden?', accent: '#dc2626',
+    body: `<p><strong>${escapeHtml(order.customer_name)}</strong><br>${escapeHtml(order.customer_email)}<br>Total: <strong>USD ${Number(order.total_usd).toFixed(2)}</strong></p>`,
+    form: { action: `/api/reject/${token}`, label: 'Sí, rechazar orden' },
+  }))
+}
+
+export async function POST(_req: Request, { params }: Params) {
+  const { token } = await params
+  const order = await findOrder(token)
+  if (!order) return notFound()
+  if (order.status === 'rejected') return already(order.customer_name)
 
   const { error: updateError } = await supabase
     .from('orders')
@@ -29,41 +45,11 @@ export async function GET(
     .eq('id', order.id)
 
   if (updateError) {
-    return new NextResponse('Error al rechazar la orden', { status: 500 })
+    return htmlResponse(adminPage({ title: 'Error', heading: 'Error al rechazar la orden', body: '', accent: '#dc2626' }), 500)
   }
 
-  return new NextResponse(resultHtml(order.customer_name, 'done'), {
-    headers: { 'Content-Type': 'text/html' },
-  })
-}
-
-function resultHtml(customerName: string, state: 'done' | 'already') {
-  return `<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orden rechazada — T2T Academy</title>
-  <style>
-    body { font-family: sans-serif; background: #0f0f17; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-    .card { background: white; border-radius: 16px; padding: 48px; max-width: 480px; text-align: center; }
-    h1 { color: #dc2626; margin-bottom: 8px; }
-    p { color: #6b7280; line-height: 1.6; }
-    .badge { background: #f3f4f6; border-radius: 8px; padding: 8px 16px; display: inline-block; font-size: 14px; color: #374151; margin-top: 16px; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div style="font-size:48px">${state === 'already' ? '⚠️' : '❌'}</div>
-    <h1>${state === 'already' ? 'Ya estaba rechazada' : 'Orden rechazada'}</h1>
-    <p>
-      ${state === 'already'
-        ? `Esta orden de <strong>${customerName}</strong> ya fue rechazada anteriormente.`
-        : `La orden de <strong>${customerName}</strong> fue marcada como rechazada.`
-      }
-    </p>
-    <div class="badge">Podés cerrar esta ventana</div>
-  </div>
-</body>
-</html>`
+  return htmlResponse(adminPage({
+    title: 'Orden rechazada', heading: 'Orden rechazada', accent: '#dc2626',
+    body: `<p>La orden de <strong>${escapeHtml(order.customer_name)}</strong> fue marcada como rechazada.</p>`,
+  }))
 }

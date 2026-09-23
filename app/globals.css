@@ -1,39 +1,70 @@
 @import "tailwindcss";
 
+/* ── Torre de Control — design tokens ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --tc-bg: #07080B;
+  --tc-bg-2: #0B0D12;
+  --tc-surface: #16181C;
+  --tc-line: rgba(255, 255, 255, .07);
+  --tc-text: #E8EAF0;
+  --tc-text-2: #9AA1B1;
+  --tc-violet: #A855F7;
+  --tc-violet-2: #C084FC;
+  --tc-violet-ink: #7E22CE;
+  --tc-green: #4ADE80;
+  --tc-green-ink: #166534;
+  --tc-hazard: #FFB020;
+  --tc-paper: #F4F1E8;   /* remito */
+  --tc-light: #E6E9EE;   /* sección catálogo */
+  --tc-light-2: #D9DBD6; /* cierre */
+  --tc-ink: #0B0D12;
+  --tc-ink-2: #4A4F5C;
+
+  --background: var(--tc-bg);
+  --foreground: var(--tc-text);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-tc-bg: var(--tc-bg);
+  --color-tc-bg-2: var(--tc-bg-2);
+  --color-tc-surface: var(--tc-surface);
+  --color-tc-text: var(--tc-text);
+  --color-tc-text-2: var(--tc-text-2);
+  --color-tc-violet: var(--tc-violet);
+  --color-tc-violet-2: var(--tc-violet-2);
+  --color-tc-violet-ink: var(--tc-violet-ink);
+  --color-tc-green: var(--tc-green);
+  --color-tc-green-ink: var(--tc-green-ink);
+  --color-tc-hazard: var(--tc-hazard);
+  --color-tc-paper: var(--tc-paper);
+  --color-tc-light: var(--tc-light);
+  --color-tc-light-2: var(--tc-light-2);
+  --color-tc-ink: var(--tc-ink);
+  --color-tc-ink-2: var(--tc-ink-2);
+  --font-display: var(--font-display), 'Space Grotesk', sans-serif;
+  --font-sans: var(--font-body), 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: var(--font-mono-tc), 'JetBrains Mono', ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-.tier-card {
-  transition: all 0.15s ease;
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
-.tier-card:hover {
-  transform: translateY(-1px);
-}
-
-.tier-card-selected {
-  border-color: #7C3AED !important;
-  background: #faf5ff !important;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+:focus-visible {
+  outline: 2px solid var(--tc-violet-2);
+  outline-offset: 2px;
 }
 
 @keyframes fadeInUp {
@@ -43,4 +74,82 @@ html {
 
 .animate-fade-in {
   animation: fadeInUp 0.4s ease forwards;
+}
+
+/* ── Torre de Control — small hover utilities ── */
+.tc-wa-outline:hover {
+  background: #166534;
+  color: #FFFFFF;
+}
+
+/* ── Torre de Control — Remito panel (sticky desktop / bottom sheet mobile) ── */
+.tc-remito-toggle {
+  display: none;
+}
+
+.tc-remito-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+@media (min-width: 900px) {
+  .tc-remito {
+    position: sticky;
+    top: 112px;
+    max-height: calc(100vh - 130px);
+  }
+}
+
+@media (max-width: 899.98px) {
+  .tc-remito {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    z-index: 70;
+    max-height: 82vh;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, .7) !important;
+  }
+  .tc-remito--empty {
+    display: none !important;
+  }
+  .tc-remito-toggle {
+    display: flex;
+  }
+  .tc-remito-body {
+    display: none;
+    max-height: calc(82vh - 60px);
+  }
+  .tc-remito-body--open {
+    display: flex;
+  }
+}
+
+/* ── Torre de Control — spec-level cards swipeable on mobile (OPCIÓN 2) ── */
+.tc-lv-track {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  padding-bottom: 6px;
+}
+
+.tc-lv-track > * {
+  scroll-snap-align: start;
+  min-width: 0;
+}
+
+@media (max-width: 899.98px) {
+  .tc-lv-track {
+    grid-auto-columns: 86%;
+  }
+}
+
+@media (min-width: 900px) {
+  .tc-lv-track {
+    grid-auto-columns: minmax(0, 1fr);
+  }
 }

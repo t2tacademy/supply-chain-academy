@@ -8,7 +8,8 @@ export async function findQualifyingOrder(email: string, upgradeType: UpgradeKey
   const { data: orders } = await supabase
     .from('orders')
     .select('id, total_usd, selections, created_at')
-    .eq('customer_email', email.toLowerCase().trim())
+    // ilike: las órdenes viejas pueden tener el email con mayúsculas (se escapan los comodines)
+    .ilike('customer_email', email.trim().replace(/[\\%_]/g, c => '\\' + c))
     .eq('status', 'approved')
 
   if (!orders || orders.length === 0) return null

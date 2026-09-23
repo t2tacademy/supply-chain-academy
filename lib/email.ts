@@ -1,5 +1,6 @@
 import { Resend } from 'resend'
 import type { OrderSelection } from './supabase'
+import { escapeHtml as e } from './html'
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY || 'placeholder')
@@ -7,6 +8,8 @@ function getResend() {
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@t2tacademy.com'
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+// Con onboarding@resend.dev Resend solo entrega al dueño de la cuenta — configurar EMAIL_FROM con un dominio verificado
+const EMAIL_FROM = process.env.EMAIL_FROM || 'T2T Academy <onboarding@resend.dev>'
 
 export async function sendAdminNotification(order: {
   id: string
@@ -20,15 +23,15 @@ export async function sendAdminNotification(order: {
   comprobanteUrl?: string | null
 }) {
   const selectionsList = order.selections
-    .map(s => `<li><strong>${s.categoryName}</strong> — ${s.tierLabel} · $${s.price.toFixed(2)} USD</li>`)
+    .map(s => `<li><strong>${e(s.categoryName)}</strong> — ${e(s.tierLabel)} · $${s.price.toFixed(2)} USD</li>`)
     .join('')
 
   const approveUrl = `${BASE_URL}/api/approve/${order.approveToken}`
 
   await getResend().emails.send({
-    from: 'T2T Academy <onboarding@resend.dev>',
+    from: EMAIL_FROM,
     to: ADMIN_EMAIL,
-    subject: `🛒 Nueva compra: ${order.customerName} — $${order.totalUsd.toFixed(2)} USD`,
+    subject: `🛒 Nueva compra: ${order.customerName.replace(/\s+/g, ' ').slice(0, 80)} — $${order.totalUsd.toFixed(2)} USD`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
         <div style="background:#7C3AED;padding:24px;border-radius:8px 8px 0 0">
@@ -36,10 +39,10 @@ export async function sendAdminNotification(order: {
         </div>
         <div style="background:#f9fafb;padding:24px;border:1px solid #e5e7eb;border-top:none">
           <h2 style="color:#1f2937;margin-top:0">Datos del comprador</h2>
-          <p><strong>Nombre:</strong> ${order.customerName}</p>
-          <p><strong>Email:</strong> ${order.customerEmail}</p>
-          ${order.customerPhone ? `<p><strong>Teléfono:</strong> ${order.customerPhone}</p>` : ''}
-          <p><strong>Método de pago:</strong> ${order.paymentMethod}</p>
+          <p><strong>Nombre:</strong> ${e(order.customerName)}</p>
+          <p><strong>Email:</strong> ${e(order.customerEmail)}</p>
+          ${order.customerPhone ? `<p><strong>Teléfono:</strong> ${e(order.customerPhone)}</p>` : ''}
+          <p><strong>Método de pago:</strong> ${e(order.paymentMethod)}</p>
 
           <h2 style="color:#1f2937">Módulos seleccionados</h2>
           <ul style="background:white;padding:16px 32px;border-radius:8px;border:1px solid #e5e7eb">
@@ -79,9 +82,9 @@ export async function sendCustomerAccess(order: {
   const driveLinksHtml = order.selections
     .map(s => `
       <div style="background:white;border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin-bottom:12px">
-        <p style="margin:0 0 8px 0;font-weight:bold;color:#1f2937">${s.categoryName} — ${s.tierLabel}</p>
+        <p style="margin:0 0 8px 0;font-weight:bold;color:#1f2937">${e(s.categoryName)} — ${e(s.tierLabel)}</p>
         ${s.driveLink && s.driveLink !== '#'
-          ? `<a href="${s.driveLink}" style="background:#7C3AED;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;display:inline-block">
+          ? `<a href="${e(s.driveLink)}" style="background:#7C3AED;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;display:inline-block">
                📁 Acceder a mis cursos
              </a>`
           : `<p style="color:#9ca3af;font-size:13px">Tu link llegará en un segundo email.</p>`
@@ -91,7 +94,7 @@ export async function sendCustomerAccess(order: {
     .join('')
 
   await getResend().emails.send({
-    from: 'T2T Academy <onboarding@resend.dev>',
+    from: EMAIL_FROM,
     to: order.customerEmail,
     subject: '🎉 ¡Tu acceso a los cursos de Supply Chain está listo!',
     html: `
@@ -101,7 +104,7 @@ export async function sendCustomerAccess(order: {
           <p style="color:#e9d5ff;margin:8px 0 0 0">Tu pago fue confirmado. Aquí tenés tu acceso.</p>
         </div>
         <div style="background:#f9fafb;padding:24px;border:1px solid #e5e7eb;border-top:none">
-          <p>Hola <strong>${order.customerName}</strong>,</p>
+          <p>Hola <strong>${e(order.customerName)}</strong>,</p>
           <p>Tu pago de <strong>$${order.totalUsd.toFixed(2)} USD</strong> fue confirmado. A continuación encontrás los links a tus carpetas de Google Drive:</p>
 
           ${driveLinksHtml}

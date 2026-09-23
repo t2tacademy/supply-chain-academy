@@ -29,7 +29,27 @@ export function getFolderIdForSelection(sel: OrderSelection): string | null {
   const cat = CATEGORY_ENV_MAP[sel.categoryId]
   if (!cat) return null
   const tier = sel.tier.toUpperCase()
-  return process.env[`DRIVE_${cat}_${tier}`] ?? null
+  // lib/courses.ts usa nombres cortos (DRIVE_SC_STARTER = link a la carpeta); si no está
+  // el ID con nombre largo, se saca el ID de ese link para que ambos esquemas funcionen
+  return process.env[`DRIVE_${cat}_${tier}`]
+    ?? folderIdFromLink(process.env[`DRIVE_${CATEGORY_SHORT_ENV[sel.categoryId]}_${tier}`])
+}
+
+const CATEGORY_SHORT_ENV: Record<string, string> = {
+  'supply-chain':      'SC',
+  'manufactura':       'MAN',
+  'stocks':            'STK',
+  'sop':               'SOP',
+  'demand-planner':    'DP',
+  'supply-planning':   'SP',
+  'planif-materiales': 'PM',
+}
+
+function folderIdFromLink(value: string | undefined): string | null {
+  if (!value) return null
+  const m = value.match(/\/folders\/([\w-]+)/) ?? value.match(/[?&]id=([\w-]+)/)
+  if (m) return m[1]
+  return /^[\w-]{20,}$/.test(value) ? value : null
 }
 
 export async function shareFolder(folderId: string, email: string): Promise<string> {

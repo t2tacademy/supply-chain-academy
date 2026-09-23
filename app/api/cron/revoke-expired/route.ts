@@ -5,8 +5,10 @@ import { revokeOrderAccess } from '@/lib/drive'
 const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000
 
 export async function GET(req: Request) {
+  // Sin CRON_SECRET configurado el endpoint queda cerrado (antes aceptaba 'Bearer undefined')
+  const secret = process.env.CRON_SECRET
   const authHeader = req.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!secret || authHeader !== `Bearer ${secret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
