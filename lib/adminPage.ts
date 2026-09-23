@@ -6,8 +6,9 @@ export function adminPage(opts: { title: string; heading: string; body: string; 
   const form = opts.form
     ? `<form method="POST" action="${escapeHtml(opts.form.action)}">
         <button type="submit">${escapeHtml(opts.form.label)}</button>
-      </form>`
-    : `<div class="badge">Podés cerrar esta ventana</div>`
+      </form>
+      <a class="link" href="/admin">Cancelar y volver al panel</a>`
+    : `<a class="back" href="/admin">← Volver al panel de órdenes</a>`
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,7 +23,8 @@ export function adminPage(opts: { title: string; heading: string; body: string; 
     h1 { color: ${opts.accent}; margin: 0 0 12px; font-size: 26px; }
     p { color: #4A4F5C; line-height: 1.6; }
     button { margin-top: 20px; background: ${opts.accent}; color: white; border: 0; padding: 14px 28px; font-weight: bold; font-size: 16px; cursor: pointer; }
-    .badge { background: rgba(11,13,18,.06); padding: 8px 16px; display: inline-block; font-size: 14px; color: #374151; margin-top: 16px; }
+    .back { display: inline-block; margin-top: 20px; background: #0B0D12; color: #fff; padding: 14px 28px; font-weight: bold; font-size: 15px; text-decoration: none; }
+    .link { display: block; margin-top: 16px; font-size: 14px; color: #4A4F5C; }
   </style>
 </head>
 <body>

@@ -205,9 +205,6 @@ export default function AdminOrders({ orders }: { orders: Order[] }) {
                         </a>
                         <a
                           href={rejectUrl}
-                          onClick={e => {
-                            if (!confirm(`¿Rechazar la orden de ${order.customer_name}?`)) e.preventDefault()
-                          }}
                           className="bg-red-100 hover:bg-red-200 text-red-700 font-bold px-5 py-2 rounded-lg text-sm transition-colors"
                         >
                           ❌ Rechazar
