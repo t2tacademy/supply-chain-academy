@@ -51,7 +51,7 @@ export async function sendAdminNotification(order: {
 
           ${order.comprobanteUrl ? `
           <div style="background:#f3f4f6;border-radius:8px;padding:12px 16px;margin-bottom:16px">
-            <p style="margin:0;font-size:13px;color:#374151">📎 <strong>Comprobante adjunto:</strong> <a href="${order.comprobanteUrl}" style="color:#7C3AED">Ver comprobante</a></p>
+            <p style="margin:0;font-size:13px;color:#374151">📎 <strong>Comprobante adjunto:</strong> <a href="${BASE_URL}/admin/comprobante/${order.id}" style="color:#7C3AED">Ver comprobante</a></p>
           </div>` : ''}
           <p style="color:#6b7280;font-size:14px">
             Una vez que confirmés que el pago fue recibido, hacé clic en el botón de abajo para enviarle el acceso al cliente.

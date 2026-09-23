@@ -184,7 +184,7 @@ export default function AdminOrders({ orders }: { orders: Order[] }) {
                     <span>📅 {formatDate(order.created_at)}</span>
                     <span>💳 {METHOD_LABELS[order.payment_method] ?? order.payment_method}</span>
                     {order.comprobante_url && (
-                      <a href={order.comprobante_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                      <a href={`/admin/comprobante/${order.id}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
                         📎 Ver comprobante
                       </a>
                     )}

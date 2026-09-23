@@ -1,58 +1,88 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import type { OrderSelection } from '@/lib/supabase'
 import { sendAdminNotification } from '@/lib/email'
-import { CATEGORIES } from '@/lib/courses'
+import { CATEGORIES, BUNDLE_PRICES, UPGRADE_PRICES, TierKey, UpgradeKey } from '@/lib/courses'
+import { findQualifyingOrder } from '@/lib/upgrades'
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { customerName, customerEmail, customerPhone, selections, paymentMethod, bundlePrice, upgradeType, upgradeLabel, upgradePrice, receiptBase64, receiptContentType, receiptFileName } = body
+    const { customerName, customerEmail, customerPhone, selections, paymentMethod, upgradeType, receiptBase64, receiptContentType, receiptFileName } = body
 
     if (!customerName || !customerEmail) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
     }
-    if (!upgradeType && (!selections || selections.length === 0)) {
+    if (!upgradeType && (!Array.isArray(selections) || selections.length === 0)) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
     }
 
-    // For upgrades, create a synthetic selection entry
-    const enrichedSelections = upgradeType
-      ? [{
-          categoryId: upgradeType,
-          categoryName: upgradeLabel || upgradeType,
-          tier: 'upgrade',
-          tierLabel: 'Upgrade',
-          price: upgradePrice,
-          driveLink: '#',
-        }]
-      : selections.map((sel: { categoryId: string; tier: string; price: number }) => {
-          const cat = CATEGORIES.find(c => c.id === sel.categoryId)
-          const tierData = cat?.tiers[sel.tier as keyof typeof cat.tiers]
-          return {
-            categoryId: sel.categoryId,
-            categoryName: cat?.name || sel.categoryId,
-            tier: sel.tier,
-            tierLabel: tierData?.label || sel.tier,
-            price: sel.price,
-            driveLink: tierData?.driveLink || '#',
-          }
-        })
+    // Los precios se calculan acá desde lib/courses.ts — nunca se confía en lo que manda el navegador
+    let enrichedSelections: OrderSelection[]
+    let totalUsd: number
 
-    const totalUsd = bundlePrice ?? enrichedSelections.reduce((sum: number, s: { price: number }) => sum + s.price, 0)
+    if (upgradeType) {
+      const upg = UPGRADE_PRICES[upgradeType as UpgradeKey]
+      if (!upg) {
+        return NextResponse.json({ error: 'Upgrade inválido' }, { status: 400 })
+      }
+      if (!(await findQualifyingOrder(customerEmail, upgradeType as UpgradeKey))) {
+        return NextResponse.json({ error: `No hay una compra aprobada del nivel ${upg.from} para ese email` }, { status: 400 })
+      }
+      // For upgrades, create a synthetic selection entry
+      enrichedSelections = [{
+        categoryId: upgradeType,
+        categoryName: upg.label,
+        tier: 'upgrade',
+        tierLabel: 'Upgrade',
+        price: upg.price,
+        driveLink: '#',
+      }]
+      totalUsd = upg.price
+    } else {
+      // Una selección por especialización (igual que el carrito)
+      const byCategory = new Map<string, TierKey>()
+      for (const sel of selections as Array<{ categoryId: string; tier: string }>) {
+        const cat = CATEGORIES.find(c => c.id === sel?.categoryId)
+        if (!cat || !Object.hasOwn(cat.tiers, sel.tier)) {
+          return NextResponse.json({ error: 'Selección inválida' }, { status: 400 })
+        }
+        byCategory.set(cat.id, sel.tier as TierKey)
+      }
 
-    // Upload receipt to Supabase Storage
+      enrichedSelections = [...byCategory].map(([categoryId, tier]) => {
+        const cat = CATEGORIES.find(c => c.id === categoryId)!
+        const tierData = cat.tiers[tier]
+        return {
+          categoryId,
+          categoryName: cat.name,
+          tier,
+          tierLabel: tierData.label,
+          price: tierData.price,
+          driveLink: tierData.driveLink,
+        }
+      })
+
+      // Catálogo completo: las 7 especializaciones al mismo nivel → precio de bundle
+      const tiers = [...byCategory.values()]
+      const bundleTier = byCategory.size === CATEGORIES.length && tiers.every(t => t === tiers[0]) ? tiers[0] : null
+      totalUsd = bundleTier
+        ? BUNDLE_PRICES[bundleTier].price
+        : enrichedSelections.reduce((sum, s) => sum + s.price, 0)
+    }
+
+    // Upload receipt to Supabase Storage (bucket privado — se guarda la ruta, no una URL pública)
     let comprobante_url: string | null = null
     if (receiptBase64 && receiptContentType) {
       try {
         const buffer = Buffer.from(receiptBase64, 'base64')
-        const ext = receiptFileName?.split('.').pop() || 'jpg'
+        const ext = (receiptFileName?.split('.').pop() || 'jpg').replace(/[^a-zA-Z0-9]/g, '').slice(0, 5) || 'jpg'
         const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
         const { error: uploadError } = await supabase.storage
           .from('comprobantes')
           .upload(fileName, buffer, { contentType: receiptContentType })
         if (!uploadError) {
-          const { data: urlData } = supabase.storage.from('comprobantes').getPublicUrl(fileName)
-          comprobante_url = urlData.publicUrl
+          comprobante_url = fileName
         }
       } catch {
         // Non-fatal: order is created even if receipt upload fails
